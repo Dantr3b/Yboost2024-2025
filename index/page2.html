@@ -24,7 +24,7 @@
 
     <script>
         // URL de votre API
-        const apiUrl = 'http://localhost:3000/cocktail-ingredients-2';
+        const apiUrl = 'http://localhost:3000/cocktail-ingredients-'+ localStorage.getItem('selectedCocktailId');
 
         async function fetchIngredients() {
             try {

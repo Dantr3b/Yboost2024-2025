@@ -21,8 +21,7 @@
 <body>
 
     <h1>Liste des Cocktail</h1>
-    <input type="text">
-    <button onclick="fetchcocktails()" >Rechercher</button>
+    <input oninput="fetchcocktails()" type="text">
     <div id="cocktail-list"></div>
 
     <script>
@@ -31,6 +30,9 @@
 
         // Fonction pour récupérer les utilisateurs
         async function fetchcocktails() {
+            //efacer les anciens cocktails
+            document.getElementById('cocktail-list').innerHTML = "";
+
             var param= document.querySelector('input').value;
             if (param == ""){
                 param = "all";
@@ -48,7 +50,7 @@
                     cocktailDiv.textContent = `ID: ${cocktail.id}, Nom: ${cocktail.name}, instructions: ${cocktail.instructions}`;
                     cocktailList.appendChild(cocktailDiv);
 
-                    // Ajouter un événement de clic pour rediriger vers la page 2
+            
                     cocktailDiv.onclick = () => {
                         localStorage.setItem('selectedCocktailId', cocktail.id); // Stocke l'ID dans localStorage
                         window.location.href = 'page2.html'; // Redirige vers la page 2
