@@ -16,14 +16,30 @@ const db = new sqlite3.Database('./BSD/api.db', (err) => {
 });
 
 // Route pour récupérer les utilisateurs
-app.get('/cocktails', (req, res) => {
-    db.all('SELECT * FROM cocktails', [], (err, rows) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        res.json(rows);
-    });
+app.get('/cocktails/search/:name', (req, res) => {
+    const cocktailName = req.params.name; // Récupérer le nom du cocktail depuis l'URL
+    const query = `SELECT * FROM cocktails WHERE "name" LIKE ?`;
+    const param = `${cocktailName}%`; // Créer le paramètre pour la requête SQL
+    console.log(cocktailName);
+
+    if (cocktailName === 'all') {
+        db.all('SELECT * FROM cocktails', [], (err, rows) => {
+            if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
+            res.json(rows);
+        });
+    }
+    else{
+        db.all(query, [param], (err, rows) => {
+            if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
+            res.json(rows);
+        });
+    }
 });
 
 // Route pour récupérer les produits
@@ -39,7 +55,6 @@ app.get('/ingredient', (req, res) => {
 
 // Route pour récupérer les produits
 app.get('/cocktail-ingredients-:id', (req, res) => {
-
     const id = req.params.id;
     console.log(id);
     const query = `
