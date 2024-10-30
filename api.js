@@ -217,12 +217,12 @@ app.get('/cocktail-ingredients-:id', (req, res) => {
  */
 
 app.get('/cocktails/searchbyingredients', (req, res) => {
-    console.log("coucou");
+
     // Récupérer les ingrédients depuis la requête et les transformer en tableau
     const ingredientNames = req.query.ingredients.split(',').map(ingredient => ingredient.trim());
     console.log(ingredientNames);
 
-    // Construction des placeholders pour la requête
+    // Construction des placeholders pour la requête SQL
     const placeholders = ingredientNames.map(() => '?').join(',');
 
     // Requête SQL pour trouver les cocktails contenant les ingrédients spécifiés
@@ -242,6 +242,7 @@ app.get('/cocktails/searchbyingredients', (req, res) => {
         ORDER BY commonIngredientCount DESC
     `;
     
+    // Exécution de la requête SQL
     db.all(query, ingredientNames, (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -249,7 +250,24 @@ app.get('/cocktails/searchbyingredients', (req, res) => {
         }
         res.json(rows);
     });
-}); 
+});
+
+app.get('/ingredient/search', (req, res) => {
+    const name = req.query.name;
+    // Construction de la requête SQL avec une condition en fonction de `name`
+    const query = name ? `SELECT * FROM ingredient WHERE name LIKE ?` : `SELECT * FROM ingredient`;
+    const params = name ? [`%${name}%`] : [];
+
+    db.all(query, params, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json(rows);
+    });
+});
+
+
 
 /**
  * @swagger
