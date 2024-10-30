@@ -4,19 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des cocktail</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .cocktail {
-            padding: 10px;
-            border: 1px solid #ccc;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            cursor: pointer; /* Ajout d'un curseur pour indiquer que la div est cliquable */
-        }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
@@ -25,48 +13,7 @@
     <input oninput="fetchcocktails()" type="text">
     <div id="cocktail-list"></div>
 
-    <script>
-        // URL de votre API
-        const apiUrl = 'http://localhost:3000/cocktails/search/';
-
-        // Fonction pour récupérer les utilisateurs
-        async function fetchcocktails() {
-            //efacer les anciens cocktails
-            document.getElementById('cocktail-list').innerHTML = "";
-
-            var param= document.querySelector('input').value;
-            if (param == ""){
-                param = "all";
-            }
-
-            try {
-                const response = await fetch(apiUrl+param);
-                const cocktails = await response.json();
-                
-                // Afficher les utilisateurs
-                const cocktailList = document.getElementById('cocktail-list');
-                cocktails.forEach(cocktail => {
-                    const cocktailDiv = document.createElement('div');
-                    cocktailDiv.className = 'cocktail';
-                    cocktailDiv.textContent = `ID: ${cocktail.id}, Nom: ${cocktail.name}, instructions: ${cocktail.instructions}`;
-                    cocktailList.appendChild(cocktailDiv);
-
-            
-                    cocktailDiv.onclick = () => {
-                        localStorage.setItem('selectedCocktailId', cocktail.id); // Stocke l'ID dans localStorage
-                        window.location.href = 'page2.html'; // Redirige vers la page 2
-                    };
-                });
-            } catch (error) {
-                console.error('Erreur lors de la récupération des utilisateurs:', error);
-            }
-        }
-
-        // Appeler la fonction au chargement de la page
-        fetchcocktails();
-
-        
-    </script>
-
+    
+<script src="js/script.js"></script>
 </body>
 </html>

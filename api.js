@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Connexion à la base de données SQLite
 const db = new sqlite3.Database('./BSD/api.db', (err) => { 
     if (err) {
         console.error('Erreur lors de l\'ouverture de la base de données :', err.message);
@@ -36,15 +37,16 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
  * @swagger
  * /cocktails/search/{name}:
  *   get:
- *     summary: Récupérer des cocktails par nom
- *     description: Récupère les cocktails dont le nom commence par le paramètre fourni.
+ *     summary: Recherche des cocktails par nom
+ *     description: Renvoie une liste de cocktails dont le nom commence par le paramètre spécifié. Si "all" est passé comme nom, renvoie tous les cocktails.
  *     parameters:
  *       - name: name
  *         in: path
- *         description: Nom du cocktail à rechercher
  *         required: true
+ *         description: Nom du cocktail à rechercher ou "all" pour obtenir tous les cocktails
  *         schema:
  *           type: string
+ *           example: "Margarita"
  *     responses:
  *       200:
  *         description: Liste des cocktails trouvés
@@ -57,17 +59,39 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
  *                 properties:
  *                   id:
  *                     type: integer
+ *                     description: ID unique du cocktail
  *                   name:
  *                     type: string
+ *                     description: Nom du cocktail
  *                   glass_type:
  *                     type: string
+ *                     description: Type de verre utilisé pour le cocktail
  *                   garnish:
  *                     type: string
+ *                     description: Garniture du cocktail
  *                   instructions:
  *                     type: string
+ *                     description: Instructions de préparation du cocktail
+ *                   alcoholic:
+ *                     type: boolean
+ *                     description: Indique si le cocktail contient de l'alcool
+ *                   created_at:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Date et heure de création du cocktail
  *       500:
- *         description: Erreur du serveur
+ *         description: Erreur du serveur lors de la recherche des cocktails
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Message d'erreur
  */
+
+// Recherche des cocktails par nom
 app.get('/cocktails/search/:name', (req, res) => {
     const cocktailName = req.params.name;
     const query = cocktailName === 'all' 
@@ -88,11 +112,44 @@ app.get('/cocktails/search/:name', (req, res) => {
  * @swagger
  * /ingredient:
  *   get:
- *     summary: Récupérer tous les ingrédients
+ *     summary: Récupère tous les ingrédients
+ *     description: Renvoie la liste complète des ingrédients disponibles dans la base de données.
  *     responses:
  *       200:
  *         description: Liste des ingrédients
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: ID unique de l'ingrédient
+ *                   name:
+ *                     type: string
+ *                     description: Nom de l'ingrédient
+ *                   type:
+ *                     type: string
+ *                     description: Type de l'ingrédient
+ *                   created_at:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Date et heure de création de l'ingrédient
+ *       500:
+ *         description: Erreur du serveur lors de la récupération des ingrédients
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Message d'erreur
  */
+
+// Sortie de tout les ingredients
 app.get('/ingredient', (req, res) => {
     db.all('SELECT * FROM ingredient', [], (err, rows) => {
         if (err) {
@@ -103,22 +160,24 @@ app.get('/ingredient', (req, res) => {
     });
 });
 
+
 /**
  * @swagger
  * /cocktail-ingredients-{id}:
  *   get:
- *     summary: Récupérer les ingrédients d'un cocktail
+ *     summary: Récupère les ingrédients d'un cocktail
  *     description: Retourne les informations d'un cocktail et ses ingrédients associés en fonction de l'ID du cocktail.
  *     parameters:
  *       - name: id
  *         in: path
- *         description: ID du cocktail
  *         required: true
+ *         description: ID du cocktail pour lequel récupérer les ingrédients
  *         schema:
  *           type: integer
+ *           example: 1
  *     responses:
  *       200:
- *         description: Liste des ingrédients du cocktail avec les détails
+ *         description: Détails du cocktail et liste des ingrédients associés
  *         content:
  *           application/json:
  *             schema:
@@ -137,7 +196,6 @@ app.get('/ingredient', (req, res) => {
  *                     description: Type de l'ingrédient
  *                   quantity:
  *                     type: number
- *                     format: float
  *                     description: Quantité de l'ingrédient utilisée dans le cocktail
  *                   unit:
  *                     type: string
@@ -152,9 +210,18 @@ app.get('/ingredient', (req, res) => {
  *                     type: string
  *                     description: Instructions pour préparer le cocktail
  *       500:
- *         description: Erreur du serveur lors de la récupération des données
+ *         description: Erreur du serveur lors de la récupération des ingrédients du cocktail
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Message d'erreur
  */
 
+// recherche des cocktails par ID
 app.get('/cocktail-ingredients-:id', (req, res) => {
     const id = req.params.id;
     const query = `
@@ -180,23 +247,23 @@ app.get('/cocktail-ingredients-:id', (req, res) => {
     });
 }); 
 
-
 /**
  * @swagger
  * /cocktails/searchbyingredients:
  *   get:
- *     summary: Rechercher des cocktails par ingrédients
- *     description: Récupère les cocktails qui contiennent les ingrédients spécifiés.
+ *     summary: Recherche des cocktails par ingrédients
+ *     description: Renvoie une liste de cocktails qui contiennent les ingrédients spécifiés, triée par le nombre d'ingrédients communs.
  *     parameters:
  *       - name: ingredients
  *         in: query
- *         description: Liste des ingrédients séparés par des virgules
  *         required: true
+ *         description: Liste des noms d'ingrédients, séparés par des virgules, à rechercher dans les cocktails
  *         schema:
  *           type: string
+ *           example: "rum,lime,sugar"
  *     responses:
  *       200:
- *         description: Liste des cocktails trouvés
+ *         description: Liste des cocktails correspondants avec leurs détails
  *         content:
  *           application/json:
  *             schema:
@@ -206,16 +273,38 @@ app.get('/cocktail-ingredients-:id', (req, res) => {
  *                 properties:
  *                   cocktailId:
  *                     type: integer
+ *                     description: ID unique du cocktail
  *                   cocktailName:
  *                     type: string
+ *                     description: Nom du cocktail
  *                   commonIngredientCount:
  *                     type: integer
+ *                     description: Nombre d'ingrédients communs avec la recherche
  *                   ingredientNames:
  *                     type: string
+ *                     description: Liste des ingrédients du cocktail trouvés dans la recherche
+ *                   glass_type:
+ *                     type: string
+ *                     description: Type de verre utilisé pour le cocktail
+ *                   garnish:
+ *                     type: string
+ *                     description: Garniture du cocktail
+ *                   instructions:
+ *                     type: string
+ *                     description: Instructions de préparation du cocktail
  *       500:
- *         description: Erreur du serveur
+ *         description: Erreur du serveur lors de la recherche des cocktails par ingrédients
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Message d'erreur
  */
 
+// Recherche des cocktails par ingrédients
 app.get('/cocktails/searchbyingredients', (req, res) => {
 
     // Récupérer les ingrédients depuis la requête et les transformer en tableau
@@ -252,6 +341,56 @@ app.get('/cocktails/searchbyingredients', (req, res) => {
     });
 });
 
+/**
+ * @swagger
+ * /ingredient/search:
+ *   get:
+ *     summary: Recherche d'ingrédients par nom
+ *     description: Renvoie une liste d'ingrédients dont le nom contient le paramètre spécifié. Si aucun nom n'est fourni, retourne tous les ingrédients.
+ *     parameters:
+ *       - name: name
+ *         in: query
+ *         required: false
+ *         description: Nom ou partie du nom de l'ingrédient à rechercher
+ *         schema:
+ *           type: string
+ *           example: "mint"
+ *     responses:
+ *       200:
+ *         description: Liste des ingrédients trouvés
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: ID unique de l'ingrédient
+ *                   name:
+ *                     type: string
+ *                     description: Nom de l'ingrédient
+ *                   type:
+ *                     type: string
+ *                     description: Type de l'ingrédient
+ *                   created_at:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Date et heure de création de l'ingrédient
+ *       500:
+ *         description: Erreur du serveur lors de la recherche d'ingrédients
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Message d'erreur
+ */
+
+// Recherche des ingrédients par nom
 app.get('/ingredient/search', (req, res) => {
     const name = req.query.name;
     // Construction de la requête SQL avec une condition en fonction de `name`
@@ -268,24 +407,23 @@ app.get('/ingredient/search', (req, res) => {
 });
 
 
-
 /**
  * @swagger
  * /matchs:
  *   get:
- *     summary: Récupérer un cocktail alcoolisé aléatoire en excluant les matchs refusés
- *     description: Retourne un cocktail alcoolisé aléatoire avec ses ingrédients, en excluant les cocktails dont les IDs sont fournis dans le paramètre `rejected`.
+ *     summary: Récupère un cocktail alcoolisé aléatoire en excluant les cocktails rejetés
+ *     description: Retourne un cocktail alcoolisé aléatoire avec ses ingrédients, en excluant ceux dont les IDs sont spécifiés dans le paramètre `rejected`.
  *     parameters:
  *       - name: rejected
  *         in: query
- *         description: Liste des IDs des cocktails refusés, séparés par des virgules
  *         required: false
+ *         description: Liste des IDs des cocktails à exclure de la sélection, séparés par des virgules
  *         schema:
  *           type: string
  *           example: "1,3,5"
  *     responses:
  *       200:
- *         description: Un cocktail alcoolisé aléatoire avec ses ingrédients
+ *         description: Détails d'un cocktail alcoolisé aléatoire et liste de ses ingrédients
  *         content:
  *           application/json:
  *             schema:
@@ -293,7 +431,7 @@ app.get('/ingredient/search', (req, res) => {
  *               properties:
  *                 id:
  *                   type: integer
- *                   description: ID du cocktail
+ *                   description: ID unique du cocktail
  *                 name:
  *                   type: string
  *                   description: Nom du cocktail
@@ -315,11 +453,18 @@ app.get('/ingredient/search', (req, res) => {
  *       404:
  *         description: Aucun cocktail disponible
  *       500:
- *         description: Erreur du serveur lors de la récupération des données
+ *         description: Erreur du serveur lors de la récupération des cocktails
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Message d'erreur
  */
 
-
-
+// generate random cocktail pour les matchs
 app.get('/matchs', (req, res) => {
     const rejected = req.query.rejected ? req.query.rejected.split(',').map(Number) : [];
 
