@@ -1,5 +1,5 @@
 const express = require('express'); // Importer le package express pour créer un serveur web
-const cors = require('cors'); // Importer le package cors pour autoriser les requêtes HTTP
+const cors = require('cors'); // Importer le package cors  pour autoriser les requêtes HTTP
 const sqlite3 = require('sqlite3').verbose(); // Importer sqlite3 pour accéder à la base de données SQLite
 const swaggerJsdoc = require('swagger-jsdoc'); // Importer swagger-jsdoc
 const swaggerUi = require('swagger-ui-express'); // Importer swagger-ui-express
@@ -135,99 +135,12 @@ app.get('/ingredient', (req, res) => {
     });
 });
 
-// Documentation de l'API pour la route /ingredient/search
+// Documentation de l'API pour la route /cocktail-ingredients-:id
 /**
  * @swagger
- * /ingredient/search:
+ * /cocktail-ingredients-{id}:
  *   get:
- *     summary: Récupérer des ingrédients par nom
- *     parameters:
- *       - name: name
- *         in: query
- *         description: Nom de l'ingrédient à rechercher
- *         required: false
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Liste des ingrédients trouvés
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- *       500:
- *         description: Erreur du serveur
- */
-
-// Route pour rechercher des ingrédients par nom
-app.get('/ingredient/search', (req, res) => {
-    const name = req.query.name;
-    const query = name ? `SELECT * FROM ingredient WHERE name LIKE ?` : `SELECT * FROM ingredient`;
-    const params = name ? [`%${name}%`] : [];
-
-    db.all(query, params, (err, rows) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        res.json(rows);
-    });
-});
-
-// Documentation de l'API pour les recettes de cocktails
-/**
- * @swagger
- * /cocktails:
- *   get:
- *     summary: Récupérer toutes les recettes de cocktails
- *     responses:
- *       200:
- *         description: Liste de toutes les recettes de cocktails
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- *                   glass_type:
- *                     type: string
- *                   garnish:
- *                     type: string
- *                   instructions:
- *                     type: string
- *       500:
- *         description: Erreur du serveur
- */
-
-// Route pour récupérer toutes les recettes de cocktails
-app.get('/cocktails', (req, res) => {
-    db.all('SELECT * FROM cocktails', [], (err, rows) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        res.json(rows);
-    });
-});
-
-// Documentation de l'API pour les ingrédients d'un cocktail
-/**
- * @swagger
- * /cocktail/{id}/ingredients:
- *   get:
- *     summary: Récupérer les ingrédients d'un cocktail par ID
+ *     summary: Récupérer les ingrédients d'un cocktail
  *     parameters:
  *       - name: id
  *         in: path
@@ -245,18 +158,44 @@ app.get('/cocktails', (req, res) => {
  *               items:
  *                 type: object
  *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
+ *                   cocktailName:
+ *                     type: string
+ *                   ingredientName:
+ *                     type: string
+ *                   type:
+ *                     type: string
+ *                   quantity:
+ *                     type: string
+ *                   unit:
+ *                     type: string
+ *                   glass_type:
+ *                     type: string
+ *                   garnish:
+ *                     type: string
+ *                   instructions:
  *                     type: string
  *       500:
  *         description: Erreur du serveur
  */
 
 // Route pour récupérer les ingrédients d'un cocktail par ID
-app.get('/cocktail/:id/ingredients', (req, res) => {
-    const cocktailId = req.params.id; // Récupérer l'ID du cocktail depuis l'URL
-    db.all('SELECT ingredient.name FROM cocktail_ingredients JOIN ingredient ON cocktail_ingredients.ingredient_id = ingredient.id WHERE cocktail_ingredients.cocktail_id = ?', [cocktailId], (err, rows) => {
+app.get('/cocktail-ingredients-:id', (req, res) => {
+    const id = req.params.id;
+    const query = `
+        SELECT cocktails.name AS cocktailName, 
+               ingredient.name AS ingredientName, 
+               ingredient.type, 
+               cocktail_ingredient.quantity, 
+               cocktail_ingredient.unit, 
+               cocktails.glass_type, 
+               cocktails.garnish, 
+               cocktails.instructions  
+        FROM cocktail_ingredient 
+        JOIN cocktails ON cocktail_ingredient.cocktail_id = cocktails.id
+        JOIN ingredient ON cocktail_ingredient.ingredient_id = ingredient.id
+        WHERE cocktail_ingredient.cocktail_id = ?
+    `;
+    db.all(query, [id], (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
@@ -265,8 +204,97 @@ app.get('/cocktail/:id/ingredients', (req, res) => {
     });
 });
 
-// Démarrer le serveur sur le port 3000
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Le serveur est en cours d'exécution sur http://localhost:${PORT}`);
+
+
+
+
+
+// Documentation de l'API pour la route /cocktails/searchbyingredients
+/**
+ * @swagger
+ * /cocktails/searchbyingredients:
+ *   get:
+ *     summary: Récupérer des cocktails par ingrédients
+ *     description: Récupère les cocktails contenant les ingrédients spécifiés.
+ *     parameters:
+ *       - name: ingredients
+ *         in: query
+ *         description: Liste des ingrédients séparés par des virgules
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Liste des cocktails trouvés
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   cocktailName:
+ *                     type: string
+ *                   commonIngredientCount:
+ *                     type: integer
+ *                   ingredientNames:
+ *                     type: string
+ *                   glass_type:
+ *                     type: string
+ *                   garnish:
+ *                     type: string
+ *                   instructions:
+ *                     type: string
+ *       500:
+ *         description: Erreur du serveur
+ */
+
+// Route pour récupérer les cocktails contenant les ingrédients spécifiés
+app.get('/cocktails/searchbyingredients', (req, res) => {
+    console.log("coucou");
+    // Récupérer les ingrédients depuis la requête et les transformer en tableau
+    const ingredientNames = req.query.ingredients.split(',').map(ingredient => ingredient.trim());
+    console.log(ingredientNames);
+
+    // Construction des placeholders pour la requête
+    const placeholders = ingredientNames.map(() => '?').join(',');
+
+    // Requête SQL pour trouver les cocktails contenant les ingrédients spécifiés
+    const query = `
+        SELECT cocktails.name AS cocktailName, 
+               COUNT(cocktail_ingredient.ingredient_id) AS commonIngredientCount,
+               GROUP_CONCAT(ingredient.name) AS ingredientNames,
+               cocktails.glass_type, 
+               cocktails.garnish, 
+               cocktails.instructions  
+        FROM cocktails
+        JOIN cocktail_ingredient ON cocktails.id = cocktail_ingredient.cocktail_id
+        JOIN ingredient ON cocktail_ingredient.ingredient_id = ingredient.id
+        WHERE ingredient.id IN (${placeholders})
+        GROUP BY cocktails.id
+        ORDER BY commonIngredientCount DESC
+    `;
+    
+    db.all(query, ingredientNames, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json(rows);
+    });
 });
+
+
+// Arrêter la base de données lors de la fermeture du serveur
+process.on('SIGINT', () => {
+    db.close((err) => {
+        if (err) {
+            console.error('Erreur lors de la fermeture de la base de données :', err.message);
+        }
+        console.log('Base de données fermée.');
+        process.exit(0);
+    });
+});
+
+// Démarrer le serveur
+app.listen(3000, () => console.log('API running on port 3000'));
