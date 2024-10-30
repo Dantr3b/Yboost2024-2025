@@ -252,10 +252,8 @@ app.get('/cocktail-ingredients-:id', (req, res) => {
 
 // Route pour récupérer les cocktails contenant les ingrédients spécifiés
 app.get('/cocktails/searchbyingredients', (req, res) => {
-    console.log("coucou");
     // Récupérer les ingrédients depuis la requête et les transformer en tableau
     const ingredientNames = req.query.ingredients.split(',').map(ingredient => ingredient.trim());
-    console.log(ingredientNames);
 
     // Construction des placeholders pour la requête
     const placeholders = ingredientNames.map(() => '?').join(',');
