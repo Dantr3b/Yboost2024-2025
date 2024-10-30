@@ -1,5 +1,5 @@
 const express = require('express'); // Importer le package express pour créer un serveur web
-const cors = require('cors'); // Importer le package cors pour autoriser les requêtes HTTP
+const cors = require('cors'); // Importer le package cors  pour autoriser les requêtes HTTP
 const sqlite3 = require('sqlite3').verbose(); // Importer sqlite3 pour accéder à la base de données SQLite
 const swaggerJsdoc = require('swagger-jsdoc'); // Importer swagger-jsdoc
 const swaggerUi = require('swagger-ui-express'); // Importer swagger-ui-express
@@ -136,20 +136,29 @@ app.get('/ingredient', (req, res) => {
 });
 
 // Documentation de l'API pour la route /cocktail-ingredients-:id
+// Documentation de l'API pour la route /cocktail-ingredients-:id
 /**
  * @swagger
  * /cocktail-ingredients-{id}:
+ * /cocktail-ingredients-{id}:
  *   get:
+ *     summary: Récupérer les ingrédients d'un cocktail
  *     summary: Récupérer les ingrédients d'un cocktail
  *     parameters:
  *       - name: id
  *         in: path
  *         description: ID du cocktail
  *         required: true
+ *       - name: id
+ *         in: path
+ *         description: ID du cocktail
+ *         required: true
  *         schema:
+ *           type: integer
  *           type: integer
  *     responses:
  *       200:
+ *         description: Liste des ingrédients du cocktail
  *         description: Liste des ingrédients du cocktail
  *         content:
  *           application/json:
@@ -279,13 +288,69 @@ app.get('/cocktails/searchbyingredients', (req, res) => {
     
     db.all(query, ingredientNames, (err, rows) => {
         if (err) {
-            res.status(500).json({ error: err.message });
+            console.error('Erreur lors de la récupération des cocktails:', err);
+            res.status(500).json({ error: 'Erreur lors de la récupération des cocktails' });
             return;
         }
-        res.json(rows);
+
+        if (cocktails.length === 0) {
+            res.status(404).json({ message: "Aucun cocktail disponible." });
+            return;
+        }
+
+        // Sélectionner un cocktail aléatoirement
+        const randomCocktail = cocktails[Math.floor(Math.random() * cocktails.length)];
+
+        // Requête pour obtenir les ingrédients du cocktail sélectionné
+        const ingredientQuery = `
+            SELECT ingredient.name, cocktail_ingredient.quantity, cocktail_ingredient.unit
+            FROM cocktail_ingredient
+            JOIN ingredient ON cocktail_ingredient.ingredient_id = ingredient.id
+            WHERE cocktail_ingredient.cocktail_id = ?
+        `;
+
+        db.all(ingredientQuery, [randomCocktail.id], (err, ingredients) => {
+            if (err) {
+                console.error('Erreur lors de la récupération des ingrédients:', err);
+                res.status(500).json({ error: 'Erreur lors de la récupération des ingrédients' });
+                return;
+            }
+
+            // Envoyer le nom et les ingrédients du cocktail sélectionné
+            res.json({
+                name: randomCocktail.name,
+                ingredients: ingredients.map(ingredient => ({
+                    name: ingredient.name,
+                    quantity: ingredient.quantity,
+                    unit: ingredient.unit
+                }))
+            });
+        });
     });
 });
 
+
+// Arrêter la base de données lors de la fermeture du serveur
+process.on('SIGINT', () => {
+    db.close((err) => {
+        if (err) {
+            console.error('Erreur lors de la fermeture de la base de données :', err.message);
+        }
+        console.log('Base de données fermée.');
+        process.exit(0);
+    });
+});
+
+
+// Arrêter la base de données lors de la fermeture du serveur
+process.on('SIGINT', () => {
+    db.close((err) => {
+        if (err) {
+            console.error('Erreur lors de la fermeture de la base de données :', err.message);
+        }
+        console.log('Base de données fermée.');
+        process.exit(0);
+    });
 app.get('/matchs', (req,res) => {
     // Requête SQL pour sélectionner tous les cocktails alcoolisés
     const cocktailQuery = `SELECT id, name FROM cocktails`;
@@ -344,3 +409,6 @@ process.on('SIGINT', () => {
         process.exit(0);
     });
 });
+
+// Démarrer le serveur
+app.listen(3000, () => console.log('API running on port 3000'));
