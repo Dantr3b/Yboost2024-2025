@@ -71,6 +71,11 @@
         }
     
         function ajouter(id, name) {
+            if (ingredientSelected.includes(id)) {
+                alert(`L'ingrédient ${name} est déjà sélectionné.`);
+                return; // Ne pas ajouter l'ingrédient si déjà sélectionné
+            }
+
             ingredientSelected.push(id);
             console.log(ingredientSelected);
     
