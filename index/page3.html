@@ -14,6 +14,13 @@
             flex-direction: row;
             justify-content: space-between;
         }
+        .cocktail {
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer; /* Ajout d'un curseur pour indiquer que la div est cliquable */
+        }
     </style>
 </head>
 <body>
@@ -99,8 +106,13 @@
                 cocktails.forEach(cocktail => {
                     const cocktailDiv = document.createElement('div');
                     cocktailDiv.className = 'cocktail';
-                    cocktailDiv.textContent = `Nom: ${cocktail.cocktailName}, Ingrédients: ${cocktail.ingredientNames}`;
+                    cocktailDiv.textContent = `ID: ${cocktail.cocktailId} Nom: ${cocktail.cocktailName}, Ingrédients: ${cocktail.ingredientNames}`;
                     cocktailList.appendChild(cocktailDiv);
+
+                    cocktailDiv.onclick = () => {
+                        localStorage.setItem('selectedCocktailId', cocktail.cocktailId); // Stocke l'ID dans localStorage
+                        window.location.href = 'page2.html'; // Redirige vers la page 2
+                    };
                 });
             })
             .catch(error => {

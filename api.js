@@ -260,7 +260,8 @@ app.get('/cocktails/searchbyingredients', (req, res) => {
 
     // Requête SQL pour trouver les cocktails contenant les ingrédients spécifiés
     const query = `
-        SELECT cocktails.name AS cocktailName, 
+        SELECT cocktails.id AS cocktailId,
+               cocktails.name AS cocktailName, 
                COUNT(cocktail_ingredient.ingredient_id) AS commonIngredientCount,
                GROUP_CONCAT(ingredient.name) AS ingredientNames,
                cocktails.glass_type, 
@@ -280,6 +281,53 @@ app.get('/cocktails/searchbyingredients', (req, res) => {
             return;
         }
         res.json(rows);
+    });
+});
+
+app.get('/matchs', (req,res) => {
+    // Requête SQL pour sélectionner tous les cocktails alcoolisés
+    const cocktailQuery = `SELECT id, name FROM cocktails`;
+
+    db.all(cocktailQuery, (err, cocktails) => {
+        if (err) {
+            console.error('Erreur lors de la récupération des cocktails:', err);
+            res.status(500).json({ error: 'Erreur lors de la récupération des cocktails' });
+            return;
+        }
+
+        if (cocktails.length === 0) {
+            res.status(404).json({ message: "Aucun cocktail disponible." });
+            return;
+        }
+
+        // Sélectionner un cocktail aléatoirement
+        const randomCocktail = cocktails[Math.floor(Math.random() * cocktails.length)];
+
+        // Requête pour obtenir les ingrédients du cocktail sélectionné
+        const ingredientQuery = `
+            SELECT ingredient.name, cocktail_ingredient.quantity, cocktail_ingredient.unit
+            FROM cocktail_ingredient
+            JOIN ingredient ON cocktail_ingredient.ingredient_id = ingredient.id
+            WHERE cocktail_ingredient.cocktail_id = ?
+        `;
+
+        db.all(ingredientQuery, [randomCocktail.id], (err, ingredients) => {
+            if (err) {
+                console.error('Erreur lors de la récupération des ingrédients:', err);
+                res.status(500).json({ error: 'Erreur lors de la récupération des ingrédients' });
+                return;
+            }
+
+            // Envoyer le nom et les ingrédients du cocktail sélectionné
+            res.json({
+                name: randomCocktail.name,
+                ingredients: ingredients.map(ingredient => ({
+                    name: ingredient.name,
+                    quantity: ingredient.quantity,
+                    unit: ingredient.unit
+                }))
+            });
+        });
     });
 });
 
