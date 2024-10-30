@@ -37,55 +37,69 @@
     </div>
 
     <script>
-        // URL de votre API
         const apiUrl = 'http://localhost:3000/ingredient';
         var ingredientSelected = [];
-
+    
         async function fetchIngredients() {
-            //efacer les anciens ingredients
             document.querySelector('.ingredient_list').innerHTML = "";
             try {
                 const response = await fetch(apiUrl);
                 const ingredients = await response.json();
                 
-                // Afficher les utilisateurs
                 const ingredientList = document.querySelector('.ingredient_list');
                 ingredients.forEach(ingredient => {
                     const ingredientDiv = document.createElement('div');
                     ingredientDiv.className = 'ingredient';
-                    ingredientDiv.innerHTML = `ID: ${ingredient.id}, Nom: ${ingredient.name} <button onclick="ajouter(${ingredient.id})">Ajouter</button>`;
+                    ingredientDiv.innerHTML = `Nom: ${ingredient.name} <button onclick="ajouter(${ingredient.id}, '${ingredient.name}')">Ajouter</button>`;
                     ingredientList.appendChild(ingredientDiv);
-                }
-                );
+                });
             } catch (error) {
-                console.error('Erreur lors de la récupération des utilisateurs:', error);
+                console.error('Erreur lors de la récupération des ingrédients:', error);
             }
         }
-
-        function ajouter(id){
+    
+        function ajouter(id, name) {
             ingredientSelected.push(id);
             console.log(ingredientSelected);
+    
             const ingredientDiv = document.createElement('div');
-            ingredientDiv.className = 'ingredient-add)';
-            ingredientDiv.textContent = `ID: ${id}`;
+            ingredientDiv.className = 'ingredient-add';
+            ingredientDiv.id = `ingredient-${id}`; // ID unique pour chaque ingrédient ajouté
+            ingredientDiv.innerHTML = `Nom: ${name} <button onclick="supprimer(${id})">Supprimer</button>`;
+            
             document.getElementById('ingredient-selected').appendChild(ingredientDiv);
+    
             searchCocktail(ingredientSelected);
         }
-        
-
-        function searchCocktail(id){
+    
+        function supprimer(id) {
+            // Retirer l'ingrédient de la liste des ingrédients sélectionnés
+            ingredientSelected = ingredientSelected.filter(ingredientId => ingredientId !== id);
+            console.log(ingredientSelected);
+    
+            // Supprimer l'élément HTML correspondant
+            const ingredientDiv = document.getElementById(`ingredient-${id}`);
+            if (ingredientDiv) {
+                ingredientDiv.remove();
+            }
+    
+            // Relancer la recherche de cocktails avec les ingrédients mis à jour
+            searchCocktail(ingredientSelected);
+        }
+    
+        function searchCocktail(id) {
             console.log(id);
-            const apiUrl = 'http://localhost:3000/cocktails/searchbyingredients?ingredients='+id;
+            const apiUrl = 'http://localhost:3000/cocktails/searchbyingredients?ingredients=' + id;
             fetch(apiUrl)
             .then(response => response.json())
             .then(cocktails => {
                 const cocktailList = document.getElementById('cocktail-list');
-                cocktailList.innerHTML = ''; // Vider la liste avant de remplir à nouveau
-
+                cocktailList.innerHTML = ''; 
+    
                 cocktails.forEach(cocktail => {
                     const cocktailDiv = document.createElement('div');
                     cocktailDiv.className = 'cocktail';
-                    cocktailDiv.textContent = `Nom: ${cocktail.cocktailName}, Ingredient de la selection ${cocktail.ingredientNames}`;
+                    cocktailDiv.textContent = `Nom: ${cocktail.cocktailName}, Ingrédients: ${cocktail.ingredientNames}`;
                     cocktailList.appendChild(cocktailDiv);
                 });
             })
@@ -93,6 +107,8 @@
                 console.error(error);
             });
         }
-                    
+    
         window.onload = fetchIngredients;
     </script>
+    
+    
