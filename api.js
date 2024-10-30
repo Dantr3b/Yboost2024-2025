@@ -255,21 +255,78 @@ app.get('/cocktails/searchbyingredients', (req, res) => {
  * @swagger
  * /matchs:
  *   get:
- *     summary: Récupérer un cocktail alcoolisé aléatoire avec ses ingrédients
+ *     summary: Récupérer un cocktail alcoolisé aléatoire en excluant les matchs refusés
+ *     description: Retourne un cocktail alcoolisé aléatoire avec ses ingrédients, en excluant les cocktails dont les IDs sont fournis dans le paramètre `rejected`.
+ *     parameters:
+ *       - name: rejected
+ *         in: query
+ *         description: Liste des IDs des cocktails refusés, séparés par des virgules
+ *         required: false
+ *         schema:
+ *           type: string
+ *           example: "1,3,5"
+ *     responses:
+ *       200:
+ *         description: Un cocktail alcoolisé aléatoire avec ses ingrédients
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   description: ID du cocktail
+ *                 name:
+ *                   type: string
+ *                   description: Nom du cocktail
+ *                 ingredients:
+ *                   type: array
+ *                   description: Liste des ingrédients du cocktail
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         description: Nom de l'ingrédient
+ *                       quantity:
+ *                         type: number
+ *                         description: Quantité de l'ingrédient
+ *                       unit:
+ *                         type: string
+ *                         description: Unité de mesure de l'ingrédient
+ *       404:
+ *         description: Aucun cocktail disponible
+ *       500:
+ *         description: Erreur du serveur lors de la récupération des données
  */
+
+
+
 app.get('/matchs', (req, res) => {
-    const cocktailQuery = `SELECT id, name FROM cocktails WHERE alcoholic = 1`;
-    db.all(cocktailQuery, (err, cocktails) => {
+    const rejected = req.query.rejected ? req.query.rejected.split(',').map(Number) : [];
+
+    // Requête SQL pour sélectionner tous les cocktails alcoolisés en excluant les rejetés
+    let cocktailQuery = `SELECT id, name FROM cocktails`;
+    if (rejected.length > 0) {
+        const placeholders = rejected.map(() => '?').join(',');
+        cocktailQuery += ` WHERE id NOT IN (${placeholders})`;
+    }
+
+    db.all(cocktailQuery, rejected, (err, cocktails) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
         }
 
         if (cocktails.length === 0) {
-            res.status(404).json({ message: "Aucun cocktail alcoolisé disponible." });
-            return;
+            return res.json({
+                id: "0",
+                name: "Aucun cocktail disponible",
+            });
         }
+        
 
+        // Sélectionner un cocktail aléatoirement parmi ceux restants
         const randomCocktail = cocktails[Math.floor(Math.random() * cocktails.length)];
         const ingredientQuery = `
             SELECT ingredient.name, cocktail_ingredient.quantity, cocktail_ingredient.unit
@@ -284,6 +341,7 @@ app.get('/matchs', (req, res) => {
                 return;
             }
             res.json({
+                id: randomCocktail.id,
                 name: randomCocktail.name,
                 ingredients: ingredients.map(ingredient => ({
                     name: ingredient.name,
@@ -294,6 +352,7 @@ app.get('/matchs', (req, res) => {
         });
     });
 });
+
 
 process.on('SIGINT', () => {
     db.close((err) => {
