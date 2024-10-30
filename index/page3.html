@@ -55,20 +55,24 @@
         
 
         function searchCocktail(id){
-            const apiUrl = 'http://localhost:3000/cocktail-ingredient/'+id;
+            console.log(id);
+            const apiUrl = 'http://localhost:3000/cocktails/searchbyingredients?ingredients='+id;
+            console.log(apiUrl);
             fetch(apiUrl)
             .then(response => response.json())
             .then(cocktails => {
                 const cocktailList = document.getElementById('cocktail-list');
+                cocktailList.innerHTML = ''; // Vider la liste avant de remplir à nouveau
+
                 cocktails.forEach(cocktail => {
                     const cocktailDiv = document.createElement('div');
                     cocktailDiv.className = 'cocktail';
-                    cocktailDiv.textContent = `ID: ${cocktail.id}, Nom: ${cocktail.name}`;
+                    cocktailDiv.textContent = `ID: ${cocktail.id}, Nom: ${cocktail.cocktailName}`;
                     cocktailList.appendChild(cocktailDiv);
                 });
             })
             .catch(error => {
-                console.error('Erreur lors de la récupération des utilisateurs:', error);
+                console.error(error);
             });
         }
                     

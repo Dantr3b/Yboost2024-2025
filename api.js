@@ -197,6 +197,7 @@ app.get('/cocktail-ingredients-:id', (req, res) => {
     `;
     db.all(query, [id], (err, rows) => {
         if (err) {
+            console.log(err);
             res.status(500).json({ error: err.message });
             return;
         }
