@@ -67,7 +67,7 @@
             console.log(ingredientSelected);
             const ingredientDiv = document.createElement('div');
             ingredientDiv.className = 'ingredient-add)';
-            ingredientDiv.textContent = `ID: ${ingredient[id]}, Nom: ${ingredient.name}`;
+            ingredientDiv.textContent = `ID: ${id}`;
             document.getElementById('ingredient-selected').appendChild(ingredientDiv);
             searchCocktail(ingredientSelected);
         }
