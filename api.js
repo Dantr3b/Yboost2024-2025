@@ -342,15 +342,7 @@ process.on('SIGINT', () => {
 });
 
 
-// Arrêter la base de données lors de la fermeture du serveur
-process.on('SIGINT', () => {
-    db.close((err) => {
-        if (err) {
-            console.error('Erreur lors de la fermeture de la base de données :', err.message);
-        }
-        console.log('Base de données fermée.');
-        process.exit(0);
-    });
+
 app.get('/matchs', (req,res) => {
     // Requête SQL pour sélectionner tous les cocktails alcoolisés
     const cocktailQuery = `SELECT id, name FROM cocktails`;
