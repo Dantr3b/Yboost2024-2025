@@ -1,15 +1,13 @@
-const express = require('express'); // Importer le package express pour créer un serveur web
-const cors = require('cors'); // Importer le package cors  pour autoriser les requêtes HTTP
-const sqlite3 = require('sqlite3').verbose(); // Importer sqlite3 pour accéder à la base de données SQLite
-const swaggerJsdoc = require('swagger-jsdoc'); // Importer swagger-jsdoc
-const swaggerUi = require('swagger-ui-express'); // Importer swagger-ui-express
+const express = require('express'); 
+const cors = require('cors');
+const sqlite3 = require('sqlite3').verbose();
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
-const app = express(); // Créer une application express
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-app.use(cors()); // Autoriser toutes les origines à accéder à l'API
-app.use(express.json()); // Middleware pour analyser le JSON
-
-// Ouvrir la base de données SQLite
 const db = new sqlite3.Database('./BSD/api.db', (err) => { 
     if (err) {
         console.error('Erreur lors de l\'ouverture de la base de données :', err.message);
@@ -21,23 +19,19 @@ const db = new sqlite3.Database('./BSD/api.db', (err) => {
 // Configuration de Swagger
 const swaggerOptions = {
     definition: {
-        openapi: '3.0.0', // Version OpenAPI
+        openapi: '3.0.0',
         info: {
             title: 'Cocktails API',
             version: '1.0.0',
             description: 'API pour récupérer des cocktails et leurs ingrédients',
         },
     },
-    apis: ['./api.js'], // chemin vers le fichier où se trouvent les commentaires Swagger
+    apis: ['./api.js'],
 };
 
-// Initialiser swagger-jsdoc
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
-
-// Utiliser swagger-ui-express pour servir l'interface Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Documentation de l'API pour la route /cocktails/search/:name
 /**
  * @swagger
  * /cocktails/search/{name}:
@@ -74,33 +68,22 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
  *       500:
  *         description: Erreur du serveur
  */
-
-// Route pour récupérer les cocktails par nom
 app.get('/cocktails/search/:name', (req, res) => {
-    const cocktailName = req.params.name; // Récupérer le nom du cocktail depuis l'URL
-    const query = `SELECT * FROM cocktails WHERE "name" LIKE ?`;
-    const param = `${cocktailName}%`; // Créer le paramètre pour la requête SQL
+    const cocktailName = req.params.name;
+    const query = cocktailName === 'all' 
+        ? 'SELECT * FROM cocktails' 
+        : 'SELECT * FROM cocktails WHERE "name" LIKE ?';
+    const param = cocktailName === 'all' ? [] : [`${cocktailName}%`];
 
-    if (cocktailName === 'all') {
-        db.all('SELECT * FROM cocktails', [], (err, rows) => {
-            if (err) {
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            res.json(rows);
-        });
-    } else {
-        db.all(query, [param], (err, rows) => {
-            if (err) {
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            res.json(rows);
-        });
-    }
+    db.all(query, param, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json(rows);
+    });
 });
 
-// Documentation de l'API pour la route /ingredient
 /**
  * @swagger
  * /ingredient:
@@ -109,22 +92,7 @@ app.get('/cocktails/search/:name', (req, res) => {
  *     responses:
  *       200:
  *         description: Liste des ingrédients
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- *       500:
- *         description: Erreur du serveur
  */
-
-// Route pour récupérer les ingrédients
 app.get('/ingredient', (req, res) => {
     db.all('SELECT * FROM ingredient', [], (err, rows) => {
         if (err) {
@@ -135,31 +103,22 @@ app.get('/ingredient', (req, res) => {
     });
 });
 
-// Documentation de l'API pour la route /cocktail-ingredients-:id
-// Documentation de l'API pour la route /cocktail-ingredients-:id
 /**
  * @swagger
  * /cocktail-ingredients-{id}:
- * /cocktail-ingredients-{id}:
  *   get:
  *     summary: Récupérer les ingrédients d'un cocktail
- *     summary: Récupérer les ingrédients d'un cocktail
+ *     description: Retourne les informations d'un cocktail et ses ingrédients associés en fonction de l'ID du cocktail.
  *     parameters:
- *       - name: id
- *         in: path
- *         description: ID du cocktail
- *         required: true
  *       - name: id
  *         in: path
  *         description: ID du cocktail
  *         required: true
  *         schema:
  *           type: integer
- *           type: integer
  *     responses:
  *       200:
- *         description: Liste des ingrédients du cocktail
- *         description: Liste des ingrédients du cocktail
+ *         description: Liste des ingrédients du cocktail avec les détails
  *         content:
  *           application/json:
  *             schema:
@@ -167,29 +126,35 @@ app.get('/ingredient', (req, res) => {
  *               items:
  *                 type: object
  *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
+ *                   cocktailName:
  *                     type: string
+ *                     description: Nom du cocktail
  *                   ingredientName:
  *                     type: string
+ *                     description: Nom de l'ingrédient
  *                   type:
  *                     type: string
+ *                     description: Type de l'ingrédient
  *                   quantity:
- *                     type: string
+ *                     type: number
+ *                     format: float
+ *                     description: Quantité de l'ingrédient utilisée dans le cocktail
  *                   unit:
  *                     type: string
+ *                     description: Unité de mesure de l'ingrédient
  *                   glass_type:
  *                     type: string
+ *                     description: Type de verre utilisé pour le cocktail
  *                   garnish:
  *                     type: string
+ *                     description: Garniture du cocktail
  *                   instructions:
  *                     type: string
+ *                     description: Instructions pour préparer le cocktail
  *       500:
- *         description: Erreur du serveur
+ *         description: Erreur du serveur lors de la récupération des données
  */
 
-// Route pour récupérer les ingrédients d'un cocktail par ID
 app.get('/cocktail-ingredients-:id', (req, res) => {
     const id = req.params.id;
     const query = `
@@ -208,26 +173,20 @@ app.get('/cocktail-ingredients-:id', (req, res) => {
     `;
     db.all(query, [id], (err, rows) => {
         if (err) {
-            console.log(err);
             res.status(500).json({ error: err.message });
             return;
         }
         res.json(rows);
     });
-});
+}); 
 
 
-
-
-
-
-// Documentation de l'API pour la route /cocktails/searchbyingredients
 /**
  * @swagger
  * /cocktails/searchbyingredients:
  *   get:
- *     summary: Récupérer des cocktails par ingrédients
- *     description: Récupère les cocktails contenant les ingrédients spécifiés.
+ *     summary: Rechercher des cocktails par ingrédients
+ *     description: Récupère les cocktails qui contiennent les ingrédients spécifiés.
  *     parameters:
  *       - name: ingredients
  *         in: query
@@ -245,26 +204,23 @@ app.get('/cocktail-ingredients-:id', (req, res) => {
  *               items:
  *                 type: object
  *                 properties:
+ *                   cocktailId:
+ *                     type: integer
  *                   cocktailName:
  *                     type: string
  *                   commonIngredientCount:
  *                     type: integer
  *                   ingredientNames:
  *                     type: string
- *                   glass_type:
- *                     type: string
- *                   garnish:
- *                     type: string
- *                   instructions:
- *                     type: string
  *       500:
  *         description: Erreur du serveur
  */
 
-// Route pour récupérer les cocktails contenant les ingrédients spécifiés
 app.get('/cocktails/searchbyingredients', (req, res) => {
+    console.log("coucou");
     // Récupérer les ingrédients depuis la requête et les transformer en tableau
     const ingredientNames = req.query.ingredients.split(',').map(ingredient => ingredient.trim());
+    console.log(ingredientNames);
 
     // Construction des placeholders pour la requête
     const placeholders = ingredientNames.map(() => '?').join(',');
@@ -288,81 +244,33 @@ app.get('/cocktails/searchbyingredients', (req, res) => {
     
     db.all(query, ingredientNames, (err, rows) => {
         if (err) {
-            console.error('Erreur lors de la récupération des cocktails:', err);
-            res.status(500).json({ error: 'Erreur lors de la récupération des cocktails' });
+            res.status(500).json({ error: err.message });
             return;
         }
-
-        if (cocktails.length === 0) {
-            res.status(404).json({ message: "Aucun cocktail disponible." });
-            return;
-        }
-
-        // Sélectionner un cocktail aléatoirement
-        const randomCocktail = cocktails[Math.floor(Math.random() * cocktails.length)];
-
-        // Requête pour obtenir les ingrédients du cocktail sélectionné
-        const ingredientQuery = `
-            SELECT ingredient.name, cocktail_ingredient.quantity, cocktail_ingredient.unit
-            FROM cocktail_ingredient
-            JOIN ingredient ON cocktail_ingredient.ingredient_id = ingredient.id
-            WHERE cocktail_ingredient.cocktail_id = ?
-        `;
-
-        db.all(ingredientQuery, [randomCocktail.id], (err, ingredients) => {
-            if (err) {
-                console.error('Erreur lors de la récupération des ingrédients:', err);
-                res.status(500).json({ error: 'Erreur lors de la récupération des ingrédients' });
-                return;
-            }
-
-            // Envoyer le nom et les ingrédients du cocktail sélectionné
-            res.json({
-                name: randomCocktail.name,
-                ingredients: ingredients.map(ingredient => ({
-                    name: ingredient.name,
-                    quantity: ingredient.quantity,
-                    unit: ingredient.unit
-                }))
-            });
-        });
+        res.json(rows);
     });
-});
+}); 
 
-
-// Arrêter la base de données lors de la fermeture du serveur
-process.on('SIGINT', () => {
-    db.close((err) => {
-        if (err) {
-            console.error('Erreur lors de la fermeture de la base de données :', err.message);
-        }
-        console.log('Base de données fermée.');
-        process.exit(0);
-    });
-});
-
-
-
-app.get('/matchs', (req,res) => {
-    // Requête SQL pour sélectionner tous les cocktails alcoolisés
-    const cocktailQuery = `SELECT id, name FROM cocktails`;
-
+/**
+ * @swagger
+ * /matchs:
+ *   get:
+ *     summary: Récupérer un cocktail alcoolisé aléatoire avec ses ingrédients
+ */
+app.get('/matchs', (req, res) => {
+    const cocktailQuery = `SELECT id, name FROM cocktails WHERE alcoholic = 1`;
     db.all(cocktailQuery, (err, cocktails) => {
         if (err) {
-            console.error('Erreur lors de la récupération des cocktails:', err);
-            res.status(500).json({ error: 'Erreur lors de la récupération des cocktails' });
+            res.status(500).json({ error: err.message });
             return;
         }
 
         if (cocktails.length === 0) {
-            res.status(404).json({ message: "Aucun cocktail disponible." });
+            res.status(404).json({ message: "Aucun cocktail alcoolisé disponible." });
             return;
         }
 
-        // Sélectionner un cocktail aléatoirement
         const randomCocktail = cocktails[Math.floor(Math.random() * cocktails.length)];
-
-        // Requête pour obtenir les ingrédients du cocktail sélectionné
         const ingredientQuery = `
             SELECT ingredient.name, cocktail_ingredient.quantity, cocktail_ingredient.unit
             FROM cocktail_ingredient
@@ -372,12 +280,9 @@ app.get('/matchs', (req,res) => {
 
         db.all(ingredientQuery, [randomCocktail.id], (err, ingredients) => {
             if (err) {
-                console.error('Erreur lors de la récupération des ingrédients:', err);
-                res.status(500).json({ error: 'Erreur lors de la récupération des ingrédients' });
+                res.status(500).json({ error: err.message });
                 return;
             }
-
-            // Envoyer le nom et les ingrédients du cocktail sélectionné
             res.json({
                 name: randomCocktail.name,
                 ingredients: ingredients.map(ingredient => ({
@@ -390,17 +295,12 @@ app.get('/matchs', (req,res) => {
     });
 });
 
-
-// Arrêter la base de données lors de la fermeture du serveur
 process.on('SIGINT', () => {
     db.close((err) => {
-        if (err) {
-            console.error('Erreur lors de la fermeture de la base de données :', err.message);
-        }
+        if (err) console.error('Erreur lors de la fermeture de la base de données :', err.message);
         console.log('Base de données fermée.');
         process.exit(0);
     });
 });
 
-// Démarrer le serveur
 app.listen(3000, () => console.log('API running on port 3000'));

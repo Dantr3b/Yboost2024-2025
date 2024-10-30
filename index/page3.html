@@ -124,13 +124,16 @@
         function searchCocktail(id) {
             console.log(id);
             const apiUrl = 'http://localhost:3000/cocktails/searchbyingredients?ingredients=' + id;
+            console.log(apiUrl);
             fetch(apiUrl)
             .then(response => response.json())
             .then(cocktails => {
                 const cocktailList = document.getElementById('cocktail-list');
+                console.log("cocktails");
                 cocktailList.innerHTML = ''; 
     
                 cocktails.forEach(cocktail => {
+                    console.log("cocktail");
                     const cocktailDiv = document.createElement('div');
                     cocktailDiv.className = 'cocktail';
                     cocktailDiv.textContent = `ID: ${cocktail.cocktailId} Nom: ${cocktail.cocktailName}, Ingrédients: ${cocktail.ingredientNames}`;
