@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des ingredient</title>
+    <title>Liste des ingrédients</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        .main{
+        .main {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -28,12 +28,17 @@
     <button onclick="window.location.href='index.html'">Retour à la liste</button> <!-- Retour à la page précédente -->
     <h1>chercher par ingredient</h1>
 
+    <!-- Barre de recherche -->
+    <div>
+        <input type="text" id="search-input" placeholder="Nom de l'ingrédient" oninput="searchIngredient()">
+    </div>
+    
     <div class="main">
         <div class="ingredient_list"></div>
         
         <br>
-        <div class="ingredient-selct">
-            <h1>ingredient selectionner</h1>
+        <div class="ingredient-select">
+            <h1>Ingrédient sélectionné</h1>
             <div id="ingredient-selected"></div>
         </div>
         <br>
@@ -93,6 +98,28 @@
             // Relancer la recherche de cocktails avec les ingrédients mis à jour
             searchCocktail(ingredientSelected);
         }
+
+        function searchIngredient() {
+            const searchValue = document.getElementById('search-input').value; // Récupérer la valeur de la barre de recherche
+            const searchApiUrl = `http://localhost:3000/ingredient/search?name=${encodeURIComponent(searchValue)}`; // Construire l'URL pour la recherche
+
+            fetch(searchApiUrl)
+            .then(response => response.json())
+            .then(ingredients => {
+                const ingredientList = document.querySelector('.ingredient_list');
+                ingredientList.innerHTML = ''; // Vider la liste actuelle
+
+                ingredients.forEach(ingredient => {
+                    const ingredientDiv = document.createElement('div');
+                    ingredientDiv.className = 'ingredient';
+                    ingredientDiv.innerHTML = `Nom: ${ingredient.name} <button onclick="ajouter(${ingredient.id}, '${ingredient.name}')">Ajouter</button>`;
+                    ingredientList.appendChild(ingredientDiv);
+                });
+            })
+            .catch(error => {
+                console.error('Erreur lors de la recherche des ingrédients:', error);
+            });
+        }
     
         function searchCocktail(id) {
             console.log(id);
@@ -123,4 +150,5 @@
         window.onload = fetchIngredients;
     </script>
     
-    
+</body>
+</html>

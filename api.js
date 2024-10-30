@@ -1,5 +1,5 @@
 const express = require('express'); // Importer le package express pour créer un serveur web
-const cors = require('cors'); // Importer le package cors  pour autoriser les requêtes HTTP
+const cors = require('cors'); // Importer le package cors pour autoriser les requêtes HTTP
 const sqlite3 = require('sqlite3').verbose(); // Importer sqlite3 pour accéder à la base de données SQLite
 const swaggerJsdoc = require('swagger-jsdoc'); // Importer swagger-jsdoc
 const swaggerUi = require('swagger-ui-express'); // Importer swagger-ui-express
@@ -158,7 +158,9 @@ app.get('/ingredient', (req, res) => {
  *               items:
  *                 type: object
  *                 properties:
- *                   cocktailName:
+ *                   id:
+ *                     type: integer
+ *                   name:
  *                     type: string
  *                   ingredientName:
  *                     type: string
@@ -342,6 +344,3 @@ process.on('SIGINT', () => {
         process.exit(0);
     });
 });
-
-// Démarrer le serveur
-app.listen(3000, () => console.log('API running on port 3000'));
