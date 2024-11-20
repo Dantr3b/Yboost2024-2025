@@ -3,6 +3,61 @@ body{
     margin:0
 }
 
+input{
+  justify-self: center;
+  align-self: center;
+  font-size: 2vh;
+  width: 75vw;
+  margin: auto;
+  display: block;
+  border-radius: 28px;
+  height: 6vh;
+  border: none;
+  background: #CEC48C;
+  opacity: 0.6;
+  backdrop-filter: blur(10px);
+}
+
+input::placeholder{
+  color: #FFFFFF;
+  font-family: 'Teachers';
+}
+
+input:focus{
+  background: linear-gradient(-90deg, #70B432, #038C5A);
+  opacity: 1;
+  outline: none;
+}
+
+.search{
+  font-size: 'Teachers';
+  color: #FFFFFF;
+  font-size: 2vh;
+  padding-left: 5vw;
+}
+
+
+.searchbar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 75vw;
+  height: 5vh;
+  margin: auto;
+  margin-top: 15vh;
+}
+
+.bx-search{
+  position: absolute;
+  margin-left: 61vw;
+  margin-top: 1.2vh;
+  padding: 1.2vh;
+  background: linear-gradient(-90deg, #70B432, #038C5A);
+  border-radius: 28px;
+  color: #FFFFFF;
+}
+
 /* Conteneur qui contrôle le positionnement */
 .svg-container {
     position: absolute; /* Important pour contrôler la position */
