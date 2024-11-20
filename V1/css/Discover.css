@@ -24,6 +24,9 @@ body{
 
 
 
+
+
+
 /* forme du bas */
 .svg-container2 {
     position: fixed; /* Fixe la position par rapport à la fenêtre */
@@ -40,6 +43,11 @@ body{
     width: 100%; /* Adapte la largeur au conteneur */
     height: auto; /* Maintient les proportions */
   }
+
+
+
+
+
 
 
 /* citron haut */
@@ -72,6 +80,23 @@ body{
       transform: rotate(1deg); /* Rotation vers la droite */
     }
   }
+
+
+
+.match{
+    position: fixed;
+    top:22%;
+    left: 11%;
+    width: 77.5%;
+    height: 48%;
+    background-color: rgba(138, 138, 138, 0.142);
+    border-radius: 28px;
+    background-blend-mode: hard-light;
+    backdrop-filter: blur(10px);
+
+}
+
+
 
 
 /* bouton du millieu */
