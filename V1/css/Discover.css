@@ -3,9 +3,66 @@ body{
     margin:0
 }
 
-/* forme du haut */
+input{
+  justify-self: center;
+  align-self: center;
+  font-size: 2vh;
+  width: 75vw;
+  margin: auto;
+  display: block;
+  border-radius: 28px;
+  height: 6vh;
+  border: none;
+  background: #CEC48C;
+  opacity: 0.6;
+  backdrop-filter: blur(10px);
+}
+
+input::placeholder{
+  color: #FFFFFF;
+  font-family: 'Teachers';
+}
+
+input:focus{
+  background: linear-gradient(-90deg, #70B432, #038C5A);
+  opacity: 1;
+  outline: none;
+}
+
+.search{
+  font-size: 'Teachers';
+  color: #FFFFFF;
+  font-size: 2vh;
+  padding-left: 5vw;
+}
+
+
+.searchbar{
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 75vw;
+  height: 5vh;
+  left: 12%;
+  top:10%;
+}
+
+.bx-search{
+  position: absolute;
+  margin-left: 61vw;
+  margin-top: 1.2vh;
+  padding: 1.2vh;
+  background: linear-gradient(-90deg, #70B432, #038C5A);
+  border-radius: 28px;
+  color: #FFFFFF;
+}
+
+/* Conteneur qui contrôle le positionnement */
 .svg-container {
     position: fixed; /* Important pour contrôler la position */
+    top:0;
     width: 100%; /* Adapte le conteneur à la largeur de l'écran */
     height: 50vh; /* Ajuste la hauteur proportionnellement à la hauteur de l'écran */
     display: flex; /* Optionnel, pour centrer le contenu */
@@ -21,6 +78,9 @@ body{
     height: auto; /* Maintient les proportions */
     max-width: 500px; /* Optionnel, limite la largeur maximale */
 }
+
+
+
 
 
 
@@ -42,11 +102,16 @@ body{
 }
 
 
+
+
+
+
+
 /* citron haut */
 .citrontop{
     position: fixed;
-    top: -6.5%;
-    right: -11%;
+    top: -2%;
+    right: -2%;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -74,10 +139,46 @@ body{
 }
 
 
+
+.match{
+    position: fixed;
+    top:20%;
+    left: 6%;
+    width: 77.5%;
+    height: 48%;
+    background-color: rgba(138, 138, 138, 0.142);
+    border-radius: 28px;
+    background-blend-mode: hard-light;
+    backdrop-filter: blur(10px);
+    padding: 5%;
+    box-shadow: #3c3c3c36 0px 10px 10px;
+}
+
+.nom{
+    color: #3C3C3C;
+    font-family: Teachers;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.ingredients{
+    color: #3C3C3C;
+    font-family: Teachers;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+
+
+
 /* bouton du millieu */
 .buttonmid{
     position: fixed;
-    top: 75%;
+    top: 80%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
