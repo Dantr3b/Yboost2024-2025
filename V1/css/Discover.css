@@ -13,14 +13,14 @@ body{
     align-items: center;
     overflow: hidden; /* Cache les débordements */
     z-index: -1; /* Place le conteneur en arrière-plan */
-  }
+}
   
-  /* SVG responsive */
-  .responsive-svg {
+/* SVG responsive */
+.responsive-svg {
     width: 100%; /* Adapte la largeur au conteneur */
     height: auto; /* Maintient les proportions */
     max-width: 500px; /* Optionnel, limite la largeur maximale */
-  }
+}
 
 
 
@@ -35,11 +35,11 @@ body{
     z-index: -1; /* Place en arrière-plan (facultatif) */
   }
   
-  /* SVG responsive */
-  .responsive-svg2 {
+/* SVG responsive */
+.responsive-svg2 {
     width: 100%; /* Adapte la largeur au conteneur */
     height: auto; /* Maintient les proportions */
-  }
+}
 
 
 /* citron haut */
@@ -58,10 +58,10 @@ body{
 .giggle-image {
     width: 150px; /* Taille de l'image (modifiable selon besoin) */
     animation: giggle 0.2s infinite; /* Applique l'animation */
-  }
+}
   
-  /* Définition de l'animation */
-  @keyframes giggle {
+/* Définition de l'animation */
+@keyframes giggle {
     0%, 100% {
       transform: rotate(0deg); /* Position initiale */
     }
@@ -71,7 +71,7 @@ body{
     75% {
       transform: rotate(1deg); /* Rotation vers la droite */
     }
-  }
+}
 
 
 /* bouton du millieu */
