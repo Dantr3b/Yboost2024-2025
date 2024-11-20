@@ -485,6 +485,7 @@ app.get('/matchs', (req, res) => {
             return res.json({
                 id: "0",
                 name: "Aucun cocktail disponible",
+                ingredient_count: 0,
             });
         }
         
@@ -492,25 +493,23 @@ app.get('/matchs', (req, res) => {
         // Sélectionner un cocktail aléatoirement parmi ceux restants
         const randomCocktail = cocktails[Math.floor(Math.random() * cocktails.length)];
         const ingredientQuery = `
-            SELECT ingredient.name, cocktail_ingredient.quantity, cocktail_ingredient.unit
+            SELECT COUNT(*) AS ingredient_count
             FROM cocktail_ingredient
-            JOIN ingredient ON cocktail_ingredient.ingredient_id = ingredient.id
             WHERE cocktail_ingredient.cocktail_id = ?
         `;
 
-        db.all(ingredientQuery, [randomCocktail.id], (err, ingredients) => {
+        // Récupérer le nombre total d'ingrédients nécessaires
+        db.get(ingredientQuery, [randomCocktail.id], (err, result) => {
             if (err) {
                 res.status(500).json({ error: err.message });
                 return;
             }
+            
             res.json({
                 id: randomCocktail.id,
                 name: randomCocktail.name,
-                ingredients: ingredients.map(ingredient => ({
-                    name: ingredient.name,
-                    quantity: ingredient.quantity,
-                    unit: ingredient.unit
-                }))
+                ingredient_count: result.ingredient_count // Retourne le nombre total d'ingrédients
+                
             });
         });
     });

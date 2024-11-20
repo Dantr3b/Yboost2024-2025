@@ -38,14 +38,15 @@ input:focus{
 
 
 .searchbar{
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   width: 75vw;
   height: 5vh;
-  margin: auto;
-  margin-top: 15vh;
+  left: 12%;
+  top:10%;
 }
 
 .bx-search{
@@ -61,6 +62,7 @@ input:focus{
 /* Conteneur qui contrôle le positionnement */
 .svg-container {
     position: fixed; /* Important pour contrôler la position */
+    top:0;
     width: 100%; /* Adapte le conteneur à la largeur de l'écran */
     height: 50vh; /* Ajuste la hauteur proportionnellement à la hauteur de l'écran */
     display: flex; /* Optionnel, pour centrer le contenu */
@@ -108,8 +110,8 @@ input:focus{
 /* citron haut */
 .citrontop{
     position: fixed;
-    top: -6.5%;
-    right: -11%;
+    top: -2%;
+    right: -2%;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -140,15 +142,34 @@ input:focus{
 
 .match{
     position: fixed;
-    top:22%;
-    left: 11%;
+    top:20%;
+    left: 6%;
     width: 77.5%;
     height: 48%;
     background-color: rgba(138, 138, 138, 0.142);
     border-radius: 28px;
     background-blend-mode: hard-light;
     backdrop-filter: blur(10px);
+    padding: 5%;
+    box-shadow: #3c3c3c36 0px 10px 10px;
+}
 
+.nom{
+    color: #3C3C3C;
+    font-family: Teachers;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.ingredients{
+    color: #3C3C3C;
+    font-family: Teachers;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 
@@ -157,7 +178,7 @@ input:focus{
 /* bouton du millieu */
 .buttonmid{
     position: fixed;
-    top: 75%;
+    top: 80%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;

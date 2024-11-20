@@ -22,13 +22,7 @@ function displayMatch(match) {
     const matchDiv = document.querySelector('.match');
     matchDiv.querySelector('.nom').textContent = match.name;
     if (match.name != "Aucun cocktail disponible"){
-        
-        // Itérer sur les ingrédients et les afficher
-        const ingredientsList = match.ingredients.map(ingredient => {
-            return `${ingredient.name}: ${ingredient.quantity} ${ingredient.unit || ''}`.trim();
-        }).join(', ');
-
-        matchDiv.querySelector('.ingredients').textContent = ingredientsList;
+        matchDiv.querySelector('.ingredients').textContent = match.ingredient_count+" - ingrédients";
     }
     else{
         matchDiv.querySelector('.ingredients').textContent = "";
