@@ -13,6 +13,10 @@
 
 </head>
 <body>
+
+  <div class="back">
+    <a href="index.html"><i class='bx bx-chevron-left'></i></a>
+  </div>
   
   <div class="svg-container">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 404" class="responsive-svg">
@@ -35,31 +39,35 @@
     </div>
 
     <div class="searchbar">
-        <input type="text" class="search" onclick="background()" placeholder="Rechercher un cocktail">
-        <i class='bx bx-search'></i>
+        <input type="text" class="search" oninput="fetchcocktails()" placeholder="Rechercher un cocktail">
+        <i class='bx bx-search' onclick="fetchcocktails()"></i>
       </div>
 
-    
-    <div class="match">
-        <div class="photo"></div>
-        <div class="nom"></div>
-        <div class="ingredients"></div>
-        <div id="info-page" class="info-page hidden">
-          <div class="info-content">
-            <ul>
-              <ul id="ingredients_list"></ul>
-              <li class="garniture"></li>
-            </ul>
-          </div>
-        </div>
-        
-    </div>
+    <div id="cocktail-list" class="cocktail-list"></div>
 
-    <!-- bouton au millieu -->
-    <div class="buttonmid">
-        <div class="circle-button" onclick="skip()"><img src="img/Multiply.png" alt=""></div>
-        <div class="circle-button" id="Add"><img src="img/Add to Favorites.png" alt=""></div>
-        <div class="circle-button" onclick="Make()"><img src="img/Cocktail.png" alt=""></div>
+
+    <div id="container" class="container">
+      <div class="match">
+          <div class="photo"></div>
+          <div class="nom"></div>
+          <div class="ingredients"></div>
+          <div id="info-page" class="info-page hidden">
+            <div class="info-content">
+              <ul>
+                <ul id="ingredients_list"></ul>
+                <li class="garniture"></li>
+              </ul>
+            </div>
+          </div>
+          
+      </div>
+
+      <!-- bouton au millieu -->
+      <div class="buttonmid">
+          <div class="circle-button" onclick="skip()"><img src="img/Multiply.png" alt=""></div>
+          <div class="circle-button" id="Add"><img src="img/Add to Favorites.png" alt=""></div>
+          <div class="circle-button" onclick="Make()"><img src="img/Cocktail.png" alt=""></div>
+      </div>
     </div>
       
 </body>

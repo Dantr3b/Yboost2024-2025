@@ -101,6 +101,71 @@ function showInfo() {
     infoPage.classList.remove('visible');
     infoPage.classList.add('hidden');
   }
+
+// URL de votre API
+const apiUrlSearch = 'http://localhost:3000/cocktails/search/';
+
+// Fonction pour récupérer les cocktails
+async function fetchcocktails() {
+    // Vider la liste existante
+    const cocktailList = document.getElementById('cocktail-list');
+    cocktailList.innerHTML = "";
+    document.getElementById('container').style.display = "none";
+    cocktailList.style.display = "block";
+  
+    // Masquer le conteneur existant (si nécessaire)
+    // document.querySelector('.container').style.display = "none";
+  
+    let param = document.querySelector('.search').value.trim();
+    if (param === "") {
+      cocktailList.style.display = "none";
+      document.getElementById('container').style.display = "block";
+    }
+  
+    try {
+      // Récupère la liste des cocktails
+      const response = await fetch(apiUrlSearch + param);
+      const cocktails = await response.json();
+  
+      // Pour chaque cocktail, on crée une "carte"
+      cocktails.forEach(cocktail => {
+        // Conteneur principal de la carte
+        const card = document.createElement('div');
+        card.classList.add('cocktail-card');
+  
+        // Image du cocktail (si l’API renvoie un champ "image")
+        // Sinon, utilisez une image par défaut (placeholder)
+        const cardImage = document.createElement('img');
+        cardImage.src = cocktail.image || 'img/Cocktailimg.png';
+        cardImage.alt = cocktail.name;
+  
+        // Nom du cocktail
+        const cardName = document.createElement('div');
+        cardName.classList.add('card-name');
+        cardName.textContent = cocktail.name;
+  
+        // Assemble la carte
+        card.appendChild(cardImage);
+        card.appendChild(cardName);
+  
+        // Au clic sur la carte, redirige vers une page de détails
+        card.onclick = () => {
+          // Stocke l’ID dans localStorage, ou utilisez un paramètre GET
+          localStorage.setItem('selectedCocktailId', cocktail.id);
+          window.location.href = 'page2.html'; 
+          // OU par paramètre GET :
+          // window.location.href = 'page2.html?id=' + cocktail.id;
+        };
+  
+        // Ajoute la carte au conteneur
+        cocktailList.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Erreur lors de la récupération des cocktails:', error);
+    }
+  }
+  
+
 // Ajout d'un gestionnaire de clic à l'image du cocktail
 document.querySelector('.match').addEventListener('click', showInfo);
 
