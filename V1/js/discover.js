@@ -39,6 +39,7 @@ async function fetchInfo() {
 
 function displayMatch(match) {
     const matchDiv = document.querySelector('.match');
+    matchDiv.querySelector('.photo').src = 'img/Cocktail/'+match.name+'.webp';
     matchDiv.querySelector('.nom').textContent = match.name;
     if (match.name != "Aucun cocktail disponible"){
         matchDiv.querySelector('.ingredients').textContent = match.ingredient_count+" - ingrédients";
@@ -136,7 +137,7 @@ async function fetchcocktails() {
         // Image du cocktail (si l’API renvoie un champ "image")
         // Sinon, utilisez une image par défaut (placeholder)
         const cardImage = document.createElement('img');
-        cardImage.src = cocktail.image || 'img/Cocktailimg.png';
+        cardImage.src = 'img/Cocktail/'+cocktail.name+'.webp';
         cardImage.alt = cocktail.name;
   
         // Nom du cocktail

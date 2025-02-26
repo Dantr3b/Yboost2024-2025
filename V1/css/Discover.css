@@ -167,22 +167,48 @@ input:focus{
     }
 }
 
-
-
-.match{
+.container{
     position: fixed;
-    top:20%;
-    left: 6%;
     width: 77.5%;
     height: 40%;
-    background-color: rgba(138, 138, 138, 0.142);
-    border-radius: 28px;
-    background-blend-mode: hard-light;
-    backdrop-filter: blur(10px);
-    padding: 5%;
-    box-shadow: #3c3c3c36 0px 10px 10px;
-    overflow: hidden; /* Masque le contenu qui dépasse */ 
+    top: 20%;
+    left: 12.5%;
 }
+
+.match {
+  position: relative; /* Nécessaire pour que l'image en absolute se positionne par rapport à .match */
+  height: 100%; /* Hauteur de la carte */
+  background-color: rgba(138, 138, 138, 0.142);
+  border-radius: 28px;
+  background-blend-mode: hard-light;
+  backdrop-filter: blur(10px);
+  padding: 5%;
+  box-shadow: #3c3c3c36 0px 10px 10px;
+  overflow: hidden; /* Masque le contenu qui dépasse */
+}
+
+.image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /* L'image couvre tout l'arrière-plan */
+  height: 100%;
+  z-index: -1; /* Place l'image derrière le texte */
+}
+
+.image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* S'assure que l'image couvre toute la div sans déformation */
+  border-radius: 28px; /* Assure que l'image suit la bordure arrondie de .match */
+}
+
+.nom, .ingredients {
+  position: relative; /* Permet au texte de rester au-dessus de l'image */
+  color: white; /* Optionnel : assure la lisibilité du texte sur l'image */
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Ajoute un effet d'ombre pour améliorer la lisibilité */
+}
+
 
 .nom{
     color: #3C3C3C;
@@ -309,7 +335,9 @@ input:focus{
 }
 
 .info-content {
+  max-height: 70vh; /* 70% de la hauteur de la fenêtre */
   padding-right: 30%;
+  overflow-y: auto;
 }
 
 .info-content ul{
@@ -368,5 +396,4 @@ input:focus{
   font-weight: 600;
   line-height: normal;
   text-align: center;
-
 }
