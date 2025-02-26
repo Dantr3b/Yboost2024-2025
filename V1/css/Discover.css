@@ -168,6 +168,7 @@ input:focus{
     backdrop-filter: blur(10px);
     padding: 5%;
     box-shadow: #3c3c3c36 0px 10px 10px;
+    overflow: hidden; /* Masque le contenu qui dépasse */ 
 }
 
 .nom{
@@ -228,4 +229,90 @@ input:focus{
     width: 52px; /* Taille de l'icône */
     height: 52px; /* Taille de l'icône */
     margin-top: 2%;
+}
+
+
+/* Styles de base pour la page */
+.info-page {
+  position: fixed;
+  display: flex;
+  top: 12%;
+  right: -120%;
+  width: 100%;
+  height: 100%;
+  background-color: #D8C76B;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+  transform: rotate(-7.01deg); /* Inclinaison légère */
+  z-index: 1000;
+}
+
+@keyframes slideInBounce {
+  0% {
+    right: -120%; /* Hors de l'écran */
+  }
+  50% {
+    right: -19%; /* Dépasse encore un peu */
+  }
+  85% {
+    right: -20%; /* Reviens vers la position finale */
+  }
+  100% {
+    right: -20%; /* Position finale */
+  }
+}
+
+
+@keyframes slideOut {
+  0% {
+    right: -20%; /* Position de départ */
+  }
+  100% {
+    right: -120%; /* Sort de l'écran */
+  }
+}
+
+
+/* Animation pour l'apparition avec rebond */
+.info-page.visible {
+  animation: slideInBounce 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards; /* Durée : 0.8s */
+}
+
+/* Animation pour la disparition rapide */
+.info-page.hidden {
+  animation: slideOut 0.2s linear forwards; /* Durée : 0.3s */
+}
+
+
+/* Cache la page d'information */
+.info-page.hidden {
+  right: -120%; /* Hors de l'écran */
+  transition: right 0.3s ease-in-out; /* Animation pour un glissement fluide */
+}
+
+/* Affiche la page d'information */
+.info-page.visible {
+  right: -20%; /* Ramène la page dans l'écran */
+  transition: right 0.3s ease-in-out; /* Animation pour un glissement fluide */
+}
+
+.info-content {
+  padding-right: 30%;
+}
+
+.info-content ul{
+  color: #000;
+  font-family: 'Nanum Brush Script', cursive;
+  font-size: 2.1875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.info-content ul ul{
+  padding: 0;
+}
+
+.info-content li{
+  list-style: none;
+  padding: 0;
 }
