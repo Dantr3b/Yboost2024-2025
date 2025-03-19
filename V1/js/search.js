@@ -10,13 +10,11 @@ function getQueryParams() {
 
 // Récupération des ID
 const selectedIngredientIds = getQueryParams();
-console.log("Ingrédients sélectionnés (ID) :", selectedIngredientIds);
 
 if (selectedIngredientIds.length > 0) {
     fetch(`${apiUrl}${selectedIngredientIds.join(",")}`)
         .then(response => response.json())
         .then(data => {
-            console.log("Cocktails trouvés :", data);
             displayCocktails(data);
         })
         .catch(error => console.error("Erreur lors de la récupération des cocktails :", error));
@@ -28,37 +26,42 @@ function displayCocktails(cocktails) {
     container.innerHTML = ""; // 🧹 Vider l'affichage précédent
 
     cocktails.forEach((cocktail, index) => {
-        // 📌 Création de la carte
+        // Création de la carte
         const card = document.createElement("div");
         card.classList.add("cocktail-card");
 
-        // 🎯 Si le nombre de cocktails est impair, le premier prend toute la largeur
+        // Si le nombre de cocktails est impair, le premier prend toute la largeur
         if (cocktails.length % 2 !== 0 && index === 0) {
-            card.classList.add("large"); // ✅ Premier cocktail en grand si impair
+            card.classList.add("large"); // Premier cocktail en grand si impair
         } else {
             card.classList.add("normal");
         }
 
-        // 🖼️ Image du cocktail
+        // Ajouter l'événement "click" pour rediriger
+        card.addEventListener("click", () => {
+            window.location.href = `cocktail.html?id=${cocktail.cocktailId}`; // Redirection vers la page détails
+        });
+
+        // Image du cocktail
         const cocktailImage = document.createElement("img");
         cocktailImage.src = `img/Cocktail/${cocktail.cocktailName}.webp`;
         cocktailImage.alt = cocktail.cocktailName;
         cocktailImage.classList.add("cocktail-image");
 
-        // 🏷️ Nom du cocktail (superposé)
+        // Nom du cocktail (superposé)
         const cocktailName = document.createElement("h3");
         cocktailName.textContent = cocktail.cocktailName;
         cocktailName.classList.add("cocktail-name");
 
-        // ➕ Ajouter les éléments à la carte
+        // Ajouter les éléments à la carte
         card.appendChild(cocktailImage);
         card.appendChild(cocktailName);
 
-        // 📌 Ajouter la carte au conteneur
+        // Ajouter la carte au conteneur
         container.appendChild(card);
     });
 
-    // 📌 Ajuster la grille après l'ajout des cartes
+    // Ajuster la grille après l'ajout des cartes
     adjustGrid(cocktails.length);
 }
 
