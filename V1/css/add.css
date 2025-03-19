@@ -1,6 +1,6 @@
 body{
     background: #F2EBC4;
-    margin:0
+    margin:0;
 }
 
 .back{
@@ -212,17 +212,6 @@ body{
     justify-content: center;
 }
 
-.add-button {
-    width: 90%;
-    padding: 10px;
-    border: none;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.5);
-    text-align: center;
-    font-size: 14px;
-    outline: none;
-}
-
 .ingredient_list-container {
     max-height: 60%;
     min-height: 60%;
@@ -319,24 +308,65 @@ color: #FFFFFF;
 }
 
 .add-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: #FFD700;
+    margin-top: 2%;
+    background: #CEC48C99;
     color: #333;
     border: none;
     padding: 5px;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
+    border-radius: 20px;
+    width: 55%;
     font-size: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+
+    font-family: "Nanum Brush Script";
+    font-size: 1.5rem;
 }
 
 .add-button:hover {
     background: #FFC300;
+}
+
+
+.add-ingrededient-button{
+    position: absolute;
+    left: 25%;
+    background: #CEC48C99;
+    color: #333;
+    border: none;
+    padding: 5px;
+    border-radius: 20px;
+    width: 55%;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    font-family: "Nanum Brush Script";
+    font-size: 1.5rem;
+}
+
+
+/* Style des boutons */
+.button-ajouter {
+    border: none;
+    color: #FFF;
+    font-family: 'Mynerve';
+    font-size: 25px;
+    cursor: pointer;
+    width: 280px;
+    height: 48px;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #038C5A 0%, #70B432 100%);
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
 }

@@ -1,0 +1,187 @@
+body{
+    background: #F2EBC4;
+    margin:0
+}
+
+/* forme du haut */
+.svg-container {
+    position: fixed; /* Important pour contrôler la position */
+    width: 100%; /* Adapte le conteneur à la largeur de l'écran */
+    height: 50vh; /* Ajuste la hauteur proportionnellement à la hauteur de l'écran */
+    display: flex; /* Optionnel, pour centrer le contenu */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Cache les débordements */
+    z-index: -1; /* Place le conteneur en arrière-plan */
+}
+  
+  /* SVG responsive */
+.responsive-svg {
+    width: 100%; /* Adapte la largeur au conteneur */
+    height: auto; /* Maintient les proportions */
+    max-width: 500px; /* Optionnel, limite la largeur maximale */
+}
+
+
+/* forme du bas */
+.svg-container2 {
+    position: fixed; /* Fixe la position par rapport à la fenêtre */
+    bottom: 0; /* Colle au bas de la page */
+    left: 0; /* Aligne au bord gauche */
+    width: 100%; /* Étire sur toute la largeur */
+    height: auto; /* Ajuste automatiquement la hauteur */
+    overflow: hidden; /* Cache tout débordement si nécessaire */
+    z-index: 10; /* Place en arrière-plan (facultatif) */
+}
+  
+  /* SVG responsive */
+.responsive-svg2 {
+    width: 100%; /* Adapte la largeur au conteneur */
+    height: auto; /* Maintient les proportions */
+}
+
+
+/* citron haut */
+.citrontop{
+    position: fixed;
+    top: -6.5%;
+    right: -11%;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    filter: blur(2px);
+    z-index: -1;
+}
+
+/* citron gauche */
+.citronleft {
+    position: fixed;
+    top: 10%;
+    right: 70%;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    filter: blur(1px);
+    z-index: -1;
+    transform: rotate(55deg); /* Rotation de 45 degrés */
+}
+
+
+/* Animation de gigotement citron */
+.giggle-image {
+    width: 150px; /* Taille de l'image (modifiable selon besoin) */
+    animation: giggle 0.2s infinite; /* Applique l'animation */
+  }
+
+.giggle-image-mid {
+    width: 300px; /* Taille de l'image (modifiable selon besoin) */
+    animation: giggle 0.2s infinite; /* Applique l'animation */
+}
+
+.giggle-image-left {
+    width: 191px; /* Taille de l'image (modifiable selon besoin) */
+    animation: giggle 0.2s infinite; /* Applique l'animation */
+}
+
+  
+  /* Définition de l'animation */
+@keyframes giggle {
+    0%, 100% {
+      transform: rotate(0deg); /* Position initiale */
+    }
+    25% {
+      transform: rotate(0deg); /* Rotation vers la gauche */
+    }
+    75% {
+      transform: rotate(0.5deg); /* Rotation vers la droite */
+    }
+}
+
+/* Conteneur principal */
+.container {
+    width: 100%;
+    text-align: center;
+}
+
+/* Partie haute : titre et sous-titre */
+.haut-page {
+    margin-top: 5vh;
+}
+
+.titre {
+    position: relative;
+    font-family: 'Luckiest Guy';
+    font-size: 70px; /* Taille du texte dynamique selon la taille de l'écran */
+    background: linear-gradient(90deg, #038C5A 0%, #F1D814 50%, #038C5A 100%);
+    background-size: 200% 100%; /* Agrandir le dégradé sur 3 fois la largeur pour garantir un mouvement fluide */
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientMove 15s linear infinite; /* Animation fluide sans coupure */
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0 0; /* Position initiale du dégradé */
+    }
+    100% {
+        background-position: 200% 0; /* Déplace le dégradé complètement à droite */
+    }
+}
+
+/* Style pour le sous-titre h3 */
+.sous-titre {
+    color: #038C5A;
+    font-family: 'Mynerve';
+    font-size: 25px;
+    font-weight: 400;
+    margin-top: -10%;
+}
+
+.result{
+    width: 80%;
+    display: grid;
+    gap: 10px;
+    margin: 0 auto;
+    grid-template-columns: repeat(2, 1fr); /* Deux colonnes */
+    padding-bottom: 40%;
+}
+
+.result img{
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+/* 📌 Taille normale pour les cocktails (2x2) */
+.normal {
+    width: 100%;
+}
+
+/* 📌 Premier cocktail en mode large si impair */
+.large {
+    grid-column: span 2; /* ✅ Occupe 2 colonnes */
+    width: 100%;
+}
+.cocktail-card {
+    position: relative; /* ✅ Permet de positionner les éléments enfants */
+    overflow: hidden; /* Empêche le texte de sortir */
+}
+
+.cocktail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.cocktail-name {
+    position: absolute; /* ✅ Superposition */
+    top: 10px; /* Ajuste la position verticale */
+    left: 50%; /* Centre horizontalement */
+    transform: translateX(-50%); /* Centre exactement */
+    color: white; /* ✅ Texte blanc pour lisibilité */
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    margin: 0;
+}

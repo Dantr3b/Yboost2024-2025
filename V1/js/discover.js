@@ -30,7 +30,6 @@ async function fetchInfo() {
             throw new Error('Erreur lors de la récupération des matchs');
         }
         currentMatch = await response.json(); // Mettre à jour currentMatch
-        console.log("dka");
         displayinfo(currentMatch);
     } catch (error) {
         console.error('Erreur lors de la récupération des matchs:', error);

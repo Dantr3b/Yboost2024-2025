@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter</title>
+    <title>ZEST LAB - Cocktail Factory</title>
+    <link rel="icon" type="image/png" href="img/citron.png">
     <link rel="stylesheet" href="css/add.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,12 +66,16 @@
     
     <div class="ingredient_list-container">
         <div class="searchbar">
-            <input type="text" class="search" oninput="searchIngredient()" placeholder="Nom de l'ingrédient">
-            <i class='bx bx-search' onclick="searchIngredient()"></i>
+            <input type="text" class="search" id="search-input " oninput="searchIngredient()" placeholder="Nom de l'ingrédient">
+            <i class='bx bx-search' id="add-input" onclick="searchIngredient()"></i>
         </div>
         <div class="ingredient_list">
             
         </div>
+    </div>
+
+    <div class="btn-container">
+        <button class="button-ajouter" onclick="redirectToPageSearch()">Ajouter</button>
     </div>
     
     

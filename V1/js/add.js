@@ -1,7 +1,7 @@
+const apiUrl="http://localhost:3000/ingredient";
 document.addEventListener("DOMContentLoaded", function() {
-    const input = document.querySelector(".add-input");
     const ingredientList = document.querySelector(".ingredient");
-    const apiUrl="http://localhost:3000/ingredient";
+    
 
 
     // Charger les ingrédients stockés
@@ -15,60 +15,69 @@ document.addEventListener("DOMContentLoaded", function() {
 
     
 
-    async function fetchIngredients() {
-        document.querySelector('.ingredient_list').innerHTML = "";
-        try {
-            const response = await fetch(apiUrl);
-            const ingredients = await response.json();
-            
-            const ingredientList = document.querySelector('.ingredient_list');
-            ingredients.forEach(ingredient => {
-                // Créer la carte de l'ingrédient
-                const ingredientCard = document.createElement('div');
-                ingredientCard.className = 'ingredient-card';
-            
-                // Image de l'ingrédient
-                const ingredientImage = document.createElement('img');
-                ingredientImage.src = `img/ingredient/${ingredient.name}`; // Assurez-vous que l'API renvoie `ingredient.image`
-                ingredientImage.alt = ingredient.name;
-                ingredientImage.className = 'ingredient-image';
-            
-                // Nom de l'ingrédient
-                const ingredientName = document.createElement('p');
-                ingredientName.textContent = ingredient.name;
-                ingredientName.className = 'ingredient-name';
-            
-                // Bouton Ajouter (+)
-                const addButton = document.createElement('button');
-                addButton.className = 'add-button';
-                addButton.innerHTML = '<i class="bx bx-plus"></i>'; // Icône de bouton
-                addButton.onclick = () => ajouter(ingredient.id, ingredient.name);
-            
-                // Ajouter les éléments à la carte
-                ingredientCard.appendChild(ingredientImage);
-                ingredientCard.appendChild(ingredientName);
-                ingredientCard.appendChild(addButton);
-            
-                // Ajouter la carte à la liste
-                document.querySelector(".ingredient_list").appendChild(ingredientCard);
-            });
-            
-            
-        } catch (error) {
-            console.error('Erreur lors de la récupération des ingrédients:', error);
-        }
-    }
+   
     
     
     
-    window.onload = fetchIngredients;
     // Charger les ingrédients existants au démarrage
     loadIngredients();
+    window.onload = fetchIngredients;
 });
 
+async function fetchIngredients() {
+    document.querySelector('.ingredient_list').innerHTML = "";
+    try {
+        const response = await fetch(apiUrl);
+        const ingredients = await response.json();
+        const storedIngredients = JSON.parse(localStorage.getItem("ingredients")) || [];
+        ingredients.forEach(ingredient => {
+            // Créer la carte de l'ingrédient
+            const ingredientCard = document.createElement('div');
+            ingredientCard.className = 'ingredient-card';
+        
+            // Image de l'ingrédient
+            const ingredientImage = document.createElement('img');
+            let imageUrl = `img/ingredient/${ingredient.name}.webp`;
+            ingredientImage.src = imageUrl;
+            ingredientImage.alt = ingredient.name;
+            ingredientImage.className = 'ingredient-image';
+        
+            // Nom de l'ingrédient
+            const ingredientName = document.createElement('p');
+            ingredientName.textContent = ingredient.name;
+            ingredientName.className = 'ingredient-name';
+        
+            // Vérification si l'ingrédient est déjà ajouté
+            const isAdded = storedIngredients.some(item => item.id === ingredient.id);
+            const addButton = document.createElement('button');
+            addButton.className = 'add-ingrededient-button';
+            addButton.innerHTML = isAdded ? '<i class="bx bx-check"></i>' : '<i class="bx bx-plus"></i>';
+            
+            if (!isAdded) {
+                addButton.onclick = () => ajouter(ingredient.id, ingredient.name, addButton);
+            }
+            
+            // Ajouter les éléments à la carte
+            ingredientCard.appendChild(ingredientImage);
+            ingredientCard.appendChild(ingredientName);
+            ingredientCard.appendChild(addButton);
+        
+            // Ajouter la carte à la liste
+            document.querySelector(".ingredient_list").appendChild(ingredientCard);
+        });
+        
+        
+    } catch (error) {
+        console.error('Erreur lors de la récupération des ingrédients:', error);
+    }
+}
+
+
 function searchIngredient() {
-    const searchValue = document.querySelector('.add-input').value;
+    const searchValue = document.getElementById('search-input').value;
     const searchApiUrl = `http://localhost:3000/ingredient/search?name=${encodeURIComponent(searchValue)}`;
+    const storedIngredients = JSON.parse(localStorage.getItem("ingredients")) || [];
+
 
     fetch(searchApiUrl)
     .then(response => response.json())
@@ -83,7 +92,8 @@ function searchIngredient() {
         
             // Image de l'ingrédient
             const ingredientImage = document.createElement('img');
-            ingredientImage.src = `img/ingredients/${ingredient.name}`; // Assurez-vous que l'API renvoie `ingredient.image`
+            let imageUrl = `img/ingredient/${ingredient.name}.webp`;
+            ingredientImage.src = imageUrl;
             ingredientImage.alt = ingredient.name;
             ingredientImage.className = 'ingredient-image';
         
@@ -92,12 +102,16 @@ function searchIngredient() {
             ingredientName.textContent = ingredient.name;
             ingredientName.className = 'ingredient-name';
         
-            // Bouton Ajouter (+)
+            // Vérification si l'ingrédient est déjà ajouté
+            const isAdded = storedIngredients.some(item => item.id === ingredient.id);
             const addButton = document.createElement('button');
-            addButton.className = 'add-button';
-            addButton.innerHTML = '<i class="bx bx-plus"></i>'; // Icône de bouton
-            addButton.onclick = () => ajouter(ingredient.id, ingredient.name);
-        
+            addButton.className = 'add-ingrededient-button';
+            addButton.innerHTML = isAdded ? '<i class="bx bx-check"></i>' : '<i class="bx bx-plus"></i>';
+            
+            if (!isAdded) {
+                addButton.onclick = () => ajouter(ingredient.id, ingredient.name, addButton);
+            }
+            
             // Ajouter les éléments à la carte
             ingredientCard.appendChild(ingredientImage);
             ingredientCard.appendChild(ingredientName);
@@ -161,7 +175,7 @@ function addIngredientToDOM(ingredient) {
 
 
 // Ajouter un ingrédient
-function ajouter(id, name) {
+function ajouter(id, name,button) {
     let ingredientsDom = JSON.parse(localStorage.getItem("ingredients")) || [];
 
     // Vérifier si l'ingrédient est déjà ajouté
@@ -178,6 +192,12 @@ function ajouter(id, name) {
 
     // Stocker l'ingrédient dans LocalStorage
     localStorage.setItem("ingredients", JSON.stringify(ingredientsDom));
+
+    // Mettre à jour l'apparence du bouton
+    if (button) {
+        button.innerHTML = '<i class="bx bx-check"></i>'; // Changer l'icône
+        button.disabled = true; // Désactiver le bouton après ajout de l'ingrédient
+    }
 
     // Ajouter au DOM
     addIngredientToDOM(newIngredient.name);
@@ -199,4 +219,22 @@ function removeIngredient(ingredient, li) {
     } else {
         console.log("Erreur : élément LI introuvable.");
     }
+    fetchIngredients();
+}
+
+
+function redirectToPageSearch() {
+    let ingredientsDom = JSON.parse(localStorage.getItem("ingredients")) || [];
+    
+    if (ingredientsDom.length === 0) {
+        alert("Veuillez sélectionner au moins un ingrédient.");
+        return;
+    }
+
+    // Convertir les ingrédients en une chaîne de requête (ex: ?ingredients=tequila,lime,salt)
+    let ingredientid = ingredientsDom.map(ingredient => ingredient.id).join(",");
+    let queryString = `?ingredients=${encodeURIComponent(ingredientid)}`;
+
+    // Rediriger avec les ingrédients sélectionnés
+    window.location.href = `search.html${queryString}`;
 }
