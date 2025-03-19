@@ -9,6 +9,33 @@ body{
     left: 5%;
   }
 
+
+  input{
+    justify-self: center;
+    align-self: center;
+    font-size: 2vh;
+    width: 75vw;
+    margin: auto;
+    display: block;
+    border-radius: 28px;
+    height: 6vh;
+    border: none;
+    background: #9a9269;
+    opacity: 0.6;
+    backdrop-filter: blur(10px);
+  }
+  
+  input::placeholder{
+    color: #FFFFFF;
+    font-family: 'Teachers';
+  }
+  
+  input:focus{
+    background: linear-gradient(-90deg, #70B432, #038C5A);
+    opacity: 1;
+    outline: none;
+  }
+
 /* Conteneur qui contrôle le positionnement */
 .svg-container {
     position: fixed; /* Important pour contrôler la position */
@@ -152,6 +179,7 @@ body{
     position: relative;
     width: 300px;
     padding: 20px;
+    min-height: 40vh;
     background: #E5D578;
     margin-top: 6vh;
     margin-left: 5%;
@@ -184,7 +212,7 @@ body{
     justify-content: center;
 }
 
-.add-input {
+.add-button {
     width: 90%;
     padding: 10px;
     border: none;
@@ -193,4 +221,122 @@ body{
     text-align: center;
     font-size: 14px;
     outline: none;
+}
+
+.ingredient_list-container {
+    max-height: 60%;
+    min-height: 60%;
+    display: block; /* Toujours visible mais caché au départ */
+    background-color: #CEC48C99;
+    position: fixed;
+    bottom: -100%; /* Commence en dehors de l'écran */
+    left: 0;
+    width: 100%;
+    transition: transform 0.5s ease-in-out, bottom 0.5s ease-in-out;
+    z-index: 15;
+    overflow-y: auto;
+    transform: translateY(100%); /* Position initiale en bas */
+}
+
+/* Classe pour afficher la liste avec animation */
+.ingredient_list-container.show {
+    bottom: 0; /* Remonte */
+    transform: translateY(0); /* Animation vers le haut */
+}
+
+
+.search{
+    font-size: 'Teachers';
+    color: #FFFFFF;
+    font-size: 2vh;
+    padding-left: 5vw;
+  }
+  
+  
+.searchbar{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 75vw;
+    height: 5vh;
+    left: 12%;
+    top:2%;
+}
+
+.bx-search{
+position: absolute;
+margin-left: 61vw;
+margin-top: 1.2vh;
+padding: 1.2vh;
+background: linear-gradient(-90deg, #70B432, #038C5A);
+border-radius: 28px;
+color: #FFFFFF;
+}
+
+.ingredient_list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colonnes égales */
+    gap: 15px; /* Espacement entre les cartes */
+    justify-content: center;
+    align-items: center;
+    margin-top: 20%;
+    padding: 10px;
+}
+
+.ingredient-card {
+    width: 100%;
+    max-width: 120px;
+    height: 160px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.ingredient-card:hover {
+    transform: scale(1.05); /* Effet au survol */
+}
+
+.ingredient-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.ingredient-name {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.add-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #FFD700;
+    color: #333;
+    border: none;
+    padding: 5px;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.add-button:hover {
+    background: #FFC300;
 }

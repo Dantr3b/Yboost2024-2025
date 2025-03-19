@@ -60,9 +60,20 @@
      </div>
 
      <div class="input-container">
-        <input type="text" class="add-input" placeholder="ajouter un ingrédient">
-     </div>
+        <button class="add-button" onclick="afficheringredients()">Ajouter un ingrédient</button>
+    </div>
+    
+    <div class="ingredient_list-container">
+        <div class="searchbar">
+            <input type="text" class="search" oninput="searchIngredient()" placeholder="Nom de l'ingrédient">
+            <i class='bx bx-search' onclick="searchIngredient()"></i>
+        </div>
+        <div class="ingredient_list">
+            
+        </div>
+    </div>
     
     
 </body>
+<script src="js/add.js"></script>
 </html>
