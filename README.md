@@ -66,3 +66,23 @@ cd backend
 npm install
 node index.js
 ```
+
+L’API est exposée sur http://localhost:3000.
+
+### Frontend
+Ouvrir le fichier index.html avec un navigateur ou servir avec une extension comme Live Server.
+
+## 📁 Structure du projet
+
+
+## 📌 Objectifs pédagogiques
+- 💡 Apprentissage du modèle client/serveur
+
+- 🔄 Compréhension du fonctionnement d’une API REST
+
+- 🎨 Développement d’un frontend interactif sans framework
+
+- 🧩 Gestion de projet en équipe et intégration continue
+
+
+
