@@ -84,5 +84,10 @@ Ouvrir le fichier index.html avec un navigateur ou servir avec une extension com
 
 - 🧩 Gestion de projet en équipe et intégration continue
 
+## 📬 Contact
+Pour toute question ou retour sur ce projet :
+
+-Dantr3b – GitHub
+
 
 
