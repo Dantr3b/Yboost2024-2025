@@ -11,8 +11,26 @@
     <link rel="icon" type="image/png" href="img/citron.png">
 </head>
 <body>
-    <div class="containerimg"></div>
-    <div class="container"></div>
+    <div class="croix" onclick="history.back()">✕</div>
+    <div class="background"><img id="cocktail_img"></div>
+    
+    <div class="container">
+        <div class="whiteline"></div>
+        <div class="top"><div id="cocktail_name"></div><div class="rate"><img src="img/Etoile.svg"></div></div>
+
+        <div class="container_2">
+            <div class="tabs">
+              <div class="tab active" onclick="showTab('ingredients')" id="Ingredients"></div>
+              <div class="tab" onclick="showTab('recette')">Recette</div>
+            </div>
+            <div class="content" id="ingredients">
+            </div>
+            <div class="content hidden" id="recette">
+            </div>
+        </div>
+        
+    </div>
     
 </body>
+<script src="js/cocktail.js"></script>
 </html>

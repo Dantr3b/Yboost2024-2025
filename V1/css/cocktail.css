@@ -1,4 +1,123 @@
 body{
     background: #F2EBC4;
-    margin:0
+    margin:0;
+    overflow: hidden;
+    height: 100%;
 }
+
+.background {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: -1;
+  }
+
+#cocktail_img {
+    width: 150%;
+    position: absolute;
+    top: -20%;
+    left: -25%;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+
+.croix {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+    transition: background-color 0.3s;
+  }
+  
+  .croix:hover {
+    background-color: rgba(0,0,0,0.6);
+  }
+  
+
+.container{
+    position: fixed;
+    top: 45%;
+    width: 101vw;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: #eadf9f;
+    border-top-left-radius: 45px;
+    border-top-right-radius: 45px;
+}
+
+.whiteline{
+    background-color: white;
+    margin-top: 10px;
+    width: 60px;
+    height: 4px;
+    border-radius: 50px;
+}
+
+
+.top{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50%;
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+#cocktail_name {
+    color: #353535;
+    text-align: center;
+    font-family: Teachers;
+    font-size: 1.5625rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.container_2 {
+    background-color: #e5dcac;
+    width: 80%;
+    height: 60vw;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .tabs {
+    display: flex;
+    background-color: #f3eccd;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .tab.active {
+    background-color: #fff;
+    border-radius: 12px 12px 0 0;
+    font-weight: bold;
+  }
+
+  .content {
+    padding: 15px;
+    font-size: 14px;
+    color: #555;
+  }
+
+  .hidden {
+    display: none;
+  }

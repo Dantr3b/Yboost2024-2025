@@ -515,6 +515,76 @@ app.get('/matchs', (req, res) => {
     });
 });
 
+/**
+ * @swagger
+ * /cocktailById:
+ *   get:
+ *     summary: Récupère les détails d'un cocktail par son ID
+ *     description: Retourne les informations d'un cocktail spécifique en fonction de son ID.
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         required: true
+ *         description: ID du cocktail à récupérer
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     responses:
+ *       200:
+ *         description: Détails du cocktail
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: ID unique du cocktail
+ *                   name:
+ *                     type: string
+ *                     description: Nom du cocktail
+ *                   glass_type:
+ *                     type: string
+ *                     description: Type de verre utilisé pour le cocktail
+ *                   garnish:
+ *                     type: string
+ *                     description: Garniture du cocktail
+ *                   instructions:
+ *                     type: string
+ *                     description: Instructions de préparation du cocktail
+ *                   alcoholic:
+ *                     type: boolean
+ *                     description: Indique si le cocktail contient de l'alcool
+ *                   created_at:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Date et heure de création du cocktail
+ *       500:
+ *         description: Erreur du serveur lors de la récupération du cocktail
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Message d'erreur
+ */
+
+
+app.get('/cocktailById' , (req, res) => {
+    const cocktailId = req.query.id;
+    db.all('SELECT * FROM cocktails WHERE id = ?', [cocktailId], (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json(rows);
+    });
+});
+
 
 process.on('SIGINT', () => {
     db.close((err) => {
