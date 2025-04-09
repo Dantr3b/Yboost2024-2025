@@ -39,7 +39,7 @@ Ce projet vous plonge dans un univers rafraîchissant où vous pouvez **découvr
 
 | Sélection d’ingrédients       | Résultats recommandés         | Fiche cocktail détaillée|
 |-------------------------------|-------------------------------|-------------------------|
-[ ![Ingrédients](screens/5.png) | ![Recommandés](screens/6.png) | ![Fiche](screens/7.png) |
+[ ![Ingrédients](screens/5.png) | ![Recommandés](screens/7.png) | ![Fiche](screens/8.png) |
 
 
 
