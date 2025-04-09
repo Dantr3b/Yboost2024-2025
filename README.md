@@ -33,17 +33,17 @@ Ce projet vous plonge dans un univers rafraîchissant où vous pouvez **découvr
 
 ### Écrans principaux :
 
-| Accueil                  | Match Cocktails                                 | Recherche               |
-|--------------------------|-------------------------------------------------|--------------------------|
-| ![Accueil](screens/1.png) | ![Match](screens/2.png) ![Match](screens/3.png)| ![Recherche](screens/3.png) |
-
-| Création Perso          | Sélection d’ingrédients  | Résultats recommandés   |
+| Accueil                  | Match Cocktails           | Recherche               |
 |--------------------------|--------------------------|--------------------------|
-| ![Perso](screens/4.png) | ![Ingrédients](screens/5.png) | ![Recommandés](screens/6.png) |
+| ![Accueil](screens/1.png) | ![Match](screens/2.png) | ![Recherche](screens/4.png) |
 
-| Fiche cocktail détaillée |
-|--------------------------|
-| ![Fiche](screens/7.png) |
+ Sélection d’ingrédients       | Résultats recommandés         || Fiche cocktail détaillée|
+-------------------------------|-------------------------------||-------------------------|
+ ![Ingrédients](screens/5.png) | ![Recommandés](screens/6.png) || ![Fiche](screens/7.png) |
+
+
+
+
 
 ---
 
