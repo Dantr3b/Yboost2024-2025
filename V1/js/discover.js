@@ -1,7 +1,8 @@
 const apiUrl = 'http://localhost:3000/matchs';
 const apiUrl2 = 'http://localhost:3000/cocktail-ingredients-';
 let rejectedMatches = [];
-let currentMatch = null; // Déclaration de currentMatch à l'échelle globale
+let cocktailId = null; // Déclaration de currentMatch à l'échelle globale
+
 
 async function fetchMatchs() {
     console.log(apiUrl + '?rejected=' + rejectedMatches.join(','));
@@ -13,6 +14,7 @@ async function fetchMatchs() {
             throw new Error('Erreur lors de la récupération des matchs');
         }
         currentMatch = await response.json(); // Mettre à jour currentMatch
+        cocktailId=currentMatch.id;
         displayMatch(currentMatch);
         fetchInfo();
     } catch (error) {
@@ -75,11 +77,7 @@ function skip() {
 }
 
 function Make() {
-    // Ajouter l'ID du match actuel aux refusés et rechercher un nouveau match
-    if (currentMatch && currentMatch.id) {
-        localStorage.setItem('selectedCocktailId', currentMatch.id); // Stocke l'ID dans localStorage
-        window.location.href = 'page2.html'; // Redirige vers la page 2
-    }
+  window.location.href = `cocktail.html?id=${cocktailId}`; // Redirection vers la page détails
 }
 
 // Fonction pour ouvrir la page d'informations
@@ -152,9 +150,7 @@ async function fetchcocktails() {
         card.onclick = () => {
           // Stocke l’ID dans localStorage, ou utilisez un paramètre GET
           localStorage.setItem('selectedCocktailId', cocktail.id);
-          window.location.href = 'page2.html'; 
-          // OU par paramètre GET :
-          // window.location.href = 'page2.html?id=' + cocktail.id;
+          window.location.href = `cocktail.html?id=${cocktail.id}`; // Redirection vers la page détails
         };
   
         // Ajoute la carte au conteneur
@@ -168,6 +164,8 @@ async function fetchcocktails() {
 
 // Ajout d'un gestionnaire de clic à l'image du cocktail
 document.querySelector('.match').addEventListener('click', showInfo);
+
+
 
 // Initialisation au chargement de la page
 window.onload = fetchMatchs;
