@@ -44,7 +44,7 @@ async function displayinfo(data) {
     const ingredients = await fetchMatchs(cocktail.id); // 👈 await ici
 
     const image = document.getElementById('cocktail_img');
-    image.src = `img/Cocktail/${cocktail.name}.webp`;
+    image.src = `../public/img/Cocktail/${cocktail.name}.webp`;
 
     const name = document.getElementById('cocktail_name');
     name.textContent = cocktail.name;

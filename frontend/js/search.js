@@ -44,7 +44,7 @@ function displayCocktails(cocktails) {
 
         // Image du cocktail
         const cocktailImage = document.createElement("img");
-        cocktailImage.src = `img/Cocktail/${cocktail.cocktailName}.webp`;
+        cocktailImage.src = `../public/img/Cocktail/${cocktail.cocktailName}.webp`;
         cocktailImage.alt = cocktail.cocktailName;
         cocktailImage.classList.add("cocktail-image");
 

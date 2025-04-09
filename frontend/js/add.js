@@ -37,7 +37,7 @@ async function fetchIngredients() {
         
             // Image de l'ingrédient
             const ingredientImage = document.createElement('img');
-            let imageUrl = `img/ingredient/${ingredient.name}.webp`;
+            let imageUrl = `../public/img/ingredient/${ingredient.name}.webp`;
             ingredientImage.src = imageUrl;
             ingredientImage.alt = ingredient.name;
             ingredientImage.className = 'ingredient-image';
@@ -92,7 +92,7 @@ function searchIngredient() {
         
             // Image de l'ingrédient
             const ingredientImage = document.createElement('img');
-            let imageUrl = `img/ingredient/${ingredient.name}.webp`;
+            let imageUrl = `../public/img/ingredient/${ingredient.name}.webp`;
             ingredientImage.src = imageUrl;
             ingredientImage.alt = ingredient.name;
             ingredientImage.className = 'ingredient-image';
