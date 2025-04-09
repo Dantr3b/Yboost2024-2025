@@ -33,9 +33,9 @@ Ce projet vous plonge dans un univers rafraîchissant où vous pouvez **découvr
 
 ### Écrans principaux :
 
-| Accueil                  | Match Cocktails          | Recherche               |
-|--------------------------|--------------------------|--------------------------|
-| ![Accueil](screens/1.png) | ![Match](screens/2.png) | ![Recherche](screens/3.png) |
+| Accueil                  | Match Cocktails                                 | Recherche               |
+|--------------------------|-------------------------------------------------|--------------------------|
+| ![Accueil](screens/1.png) | ![Match](screens/2.png) ![Match](screens/3.png)| ![Recherche](screens/3.png) |
 
 | Création Perso          | Sélection d’ingrédients  | Résultats recommandés   |
 |--------------------------|--------------------------|--------------------------|
