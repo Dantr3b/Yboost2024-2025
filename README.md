@@ -73,6 +73,11 @@ L’API est exposée sur http://localhost:3000.
 Ouvrir le fichier index.html avec un navigateur ou servir avec une extension comme Live Server.
 
 ## 📁 Structure du projet
+.
+├── backend/               → Serveur Express + API + SQLite
+├── frontend/              → HTML/CSS/JS (pages + composants)
+├── public/img             → Illustrations, photos de cocktails
+├── README.md              → Vous êtes ici 🍹
 
 
 ## 📌 Objectifs pédagogiques
