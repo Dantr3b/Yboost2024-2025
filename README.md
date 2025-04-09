@@ -19,7 +19,7 @@ Ce projet vous plonge dans un univers rafraîchissant où vous pouvez **découvr
 ### Frontend
 - HTML5 / CSS3
 - JavaScript Vanilla
-- Design responsive (mobile first)
+- Design Mobile first
 - UI/UX personnalisée
 
 ### Backend
