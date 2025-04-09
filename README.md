@@ -33,9 +33,9 @@ Ce projet vous plonge dans un univers rafraîchissant où vous pouvez **découvr
 
 ### Écrans principaux :
 
-| Accueil                  | Match Cocktails           | Recherche               |
-|--------------------------|--------------------------|--------------------------|
-| ![Accueil](screens/1.png) | ![Match](screens/2.png) | ![Recherche](screens/4.png) |
+| Accueil                  | Match Cocktails           | Recherche               ||
+|--------------------------|--------------------------|--------------------------|[
+| ![Accueil](screens/1.png) | ![Match](screens/2.png) | ![Recherche](screens/4.png) ||
 
 | Sélection d’ingrédients       | Résultats recommandés         || Fiche cocktail détaillée|
 |-------------------------------|-------------------------------||-------------------------|
@@ -51,7 +51,6 @@ Ce projet vous plonge dans un univers rafraîchissant où vous pouvez **découvr
 
 - 🔍 **Rechercher un cocktail** selon son nom
 - 🍸 **Découvrir aléatoirement** des cocktails à tester
-- ➕ **Composer un cocktail personnalisé** en ajoutant des ingrédients
 - 🧠 **Suggestion intelligente** de cocktails possibles selon les ingrédients sélectionnés
 - 📋 **Fiche détaillée** : Ingrédients, recette, visuel, note
 
@@ -64,7 +63,7 @@ Ce projet vous plonge dans un univers rafraîchissant où vous pouvez **découvr
 ```bash
 cd backend
 npm install
-node index.js
+node app.js
 ```
 
 L’API est exposée sur http://localhost:3000.
