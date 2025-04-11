@@ -366,7 +366,6 @@ input:focus{
   display: none;
   position: fixed;
   top:20%;
-  left: 10%;
   overflow-y: auto;
 }
 
