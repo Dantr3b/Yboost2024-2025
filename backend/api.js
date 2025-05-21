@@ -3,13 +3,15 @@ const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/img', express.static(path.join(__dirname, '../public/img')));
 
 // Connexion à la base de données SQLite
-const db = new sqlite3.Database('./BSD/api.db', (err) => { 
+const db = new sqlite3.Database('./bdd/api.db', (err) => { 
     if (err) {
         console.error('Erreur lors de l\'ouverture de la base de données :', err.message);
     } else {
