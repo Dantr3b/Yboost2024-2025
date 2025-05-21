@@ -311,7 +311,6 @@ app.get('/cocktails/searchbyingredients', (req, res) => {
 
     // Récupérer les ingrédients depuis la requête et les transformer en tableau
     const ingredientNames = req.query.ingredients.split(',').map(ingredient => ingredient.trim());
-    console.log(ingredientNames);
 
     // Construction des placeholders pour la requête SQL
     const placeholders = ingredientNames.map(() => '?').join(',');
