@@ -63,7 +63,7 @@ Ce projet vous plonge dans un univers rafraîchissant où vous pouvez **découvr
 ```bash
 cd backend
 npm install
-node app.js
+node api.js
 ```
 
 L’API est exposée sur http://localhost:3000.
